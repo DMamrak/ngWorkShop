@@ -1,5 +1,5 @@
 AngularJS basics
-	- MVC concept, MVVM concept
+	- MVC concept, MVVM concept, decoupling data, logic and DOM
 	- 2-way data binding concept 
 	- Declarative programming concept
 	- Framework history
@@ -26,8 +26,13 @@ Directive concept basics
 	- Declarative way of expression
 
 Scope concept
-	- Scopes and digest loops, watching for model changes and listening / broadcasting events
-	- Scopes inheritanse
+	- Coupling logic and view
+	- Model incapsulation
+	- API for model changes watching
+	- API listening / broadcasting events
+	- Nesting scopes
+	- Scopes inheritanse and method / property lookup
+	- Digest loops and dirty checking
 
 Controller concept
 	- Class pattern
@@ -53,7 +58,7 @@ Filter concept
 
 Service concept
 	- Singltone pattern
-	- Built-in services
+	- Built-in services ($window, $timeout, $interval, $http)
 	- $http service and promise concept
 	- Custom properties of $http promise
 	- $q service, deferred objects and custom promises
