@@ -1,0 +1,128 @@
+AngularJS basics
+	- MVC concept, MVVM concept
+	- 2-way data binding concept 
+	- Declarative programming concept
+	- Framework history
+	- AngularJS pros and cons
+
+Setting up a very basic project (todo app or something similar)
+	- Git
+	- Github
+	- NodeJS + npm
+	- Grunt
+	- Bower (Why Bower?)
+
+Module concept
+	- Modules definition
+	- Modules retrieving
+	- Dependency injection
+		- ad-hoc serving
+		- modularity
+		- easy mosking out ($window)
+	- Main module and Angular application bootstrapping
+	
+Directive concept basics
+	- Extending basic HTML with custom elements, attributes and interactions
+	- Declarative way of expression
+
+Scope concept
+	- Scopes and digest loops, watching for model changes and listening / broadcasting events
+	- Scopes inheritanse
+
+Controller concept
+	- Class pattern
+	- Coupling controller to DOM
+	- Exposing controller props and methods to view using "as" notation.
+	- Exposing controller props and methods to view using scope.
+	- Nesting controllers and scopes
+
+Templating
+	- ng-bind
+	- Expressions and built in variables
+	- Built-in directives: (ng-repeat, ng-model, ng-show/ng-hide, ng-if, ng-<event>)
+	- ng-form, ng-href, ng-src as a workarounds for potential issues
+	- ng-include
+	- Forgiving object definition
+
+Filter concept
+	- Changing presentation, leaving model intact
+	- Built-in filters (json, lowercase/uppercase, number, filter)
+	- Passing params to filters
+	- Chaining filters
+	- Filters pros and cons (performance impact)
+
+Service concept
+	- Singltone pattern
+	- Built-in services
+	- $http service and promise concept
+	- Custom properties of $http promise
+	- $q service, deferred objects and custom promises
+
+Routing concept
+	- Config section
+	- External templates
+	- Route params
+	- Route events
+	- $location service, no reload on search
+
+Directives in-depth
+	- Directive definition object
+	- Templates (internal, external, dynamically set)
+	- Scopes: parent, inherites, isolated. Passing data into isolated scope
+	- Controllers, requesting external controllers
+	- Compile and Link phases
+	- Transclusion: definition in template, transcluded scope
+	- Nested directives, compiling and linking order
+
+Components
+	- serving custom directive as a component: possible approaches
+	- extending directives with shared controller and scope
+
+Performance problem and other issues and ways to work around them
+	- Filters multiple evaluation, using filters inside controllers and services
+	- Scopes isolation, nesting and inheritance
+	- ng-if
+	- One-time binding
+	- track by
+	- $scope.$digest() vs $scope.$apply and events (?)
+	- ng-cloak
+	- ng-init and other ways to declare vars and methods silently
+
+Unit testing
+	- Toolkit: Jasmine, Karma, PhantomJS, browser launchers.
+	- describe()
+	- it()
+	- beforeEach() and afterEach()
+	- Matchers
+	- Spies
+	- ngMocks and built-in mock objects
+	- Dependency injection
+	- Custom mocks
+
+Unit testing filter
+
+Unit testing service
+
+Unit testing controller
+
+Unit testing directive
+
+Automated project deployment in depth
+	- npm 
+		- configuring npm
+		- installation workflow: preinstall, installation, postinstall
+	- Bower
+		- why use Bower?
+		- configuring Bower
+	- Grunt
+		- configuring Grunt
+		- collecting Bower components and assets
+		- building SCSS
+		- collecting external templates
+		- building Angular app 
+		- annotating component definitions
+		- concatenating and minifying scripts
+		- linting / hinting
+		- running tests
+		- publishing and packaging app
+		- dev and pub workflow

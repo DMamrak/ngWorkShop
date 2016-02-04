@@ -1,0 +1,23 @@
+{
+  "name": "demo",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Denis Mamrak"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.9",
+    "reset-css": "~2.0.2011012603"
+  }
+}
