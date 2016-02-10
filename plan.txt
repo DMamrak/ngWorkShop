@@ -1,4 +1,4 @@
-AngularJS basics
+AngularJS basics 
 	+ MVC concept, MVVM concept, decoupling data, logic and DOM
 	+ 2-way data binding concept 
 	+ Declarative programming concept
