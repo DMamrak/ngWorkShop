@@ -1,60 +1,53 @@
 AngularJS basics
-	- MVC concept, MVVM concept, decoupling data, logic and DOM
-	- 2-way data binding concept 
-	- Declarative programming concept
-	- Framework history
-	- AngularJS pros and cons
-
-Setting up a very basic project (todo app or something similar)
-	- Git
-	- Github
-	- NodeJS + npm
-	- Grunt
-	- Bower (Why Bower?)
+	+ MVC concept, MVVM concept, decoupling data, logic and DOM
+	+ 2-way data binding concept 
+	+ Declarative programming concept
+	+ Framework history
+	+ AngularJS pros and cons
 
 Module concept
-	- Modules definition
-	- Modules retrieving
-	- Dependency injection
-		- ad-hoc serving
-		- modularity
+	+ Modules definition
+	+ Modules retrieving
+	+ Dependency injection
+		+ ad-hoc serving
+		+ modularity
 		- easy mosking out ($window)
-	- Main module and Angular application bootstrapping
+	+ Main module and Angular application bootstrapping
 	
 Directive concept basics
-	- Extending basic HTML with custom elements, attributes and interactions
-	- Declarative way of expression
+	+ Extending basic HTML with custom elements, attributes and interactions
+	+ Declarative way of expression
 
 Scope concept
-	- Coupling logic and view
-	- Model incapsulation
-	- API for model changes watching
+	+ Coupling logic and view
+	+ Model incapsulation
+	+ API for model changes watching
 	- API listening / broadcasting events
-	- Nesting scopes
-	- Scopes inheritanse and method / property lookup
-	- Digest loops and dirty checking
+	+ Nesting scopes
+	+ Scopes inheritanse and method / property lookup
+	+ Digest loops and dirty checking
 
 Controller concept
-	- Class pattern
-	- Coupling controller to DOM
-	- Exposing controller props and methods to view using "as" notation.
-	- Exposing controller props and methods to view using scope.
+	+ Class pattern
+	+ Coupling controller to DOM
+	+ Exposing controller props and methods to view using "as" notation.
+	+ Exposing controller props and methods to view using scope.
 	- Nesting controllers and scopes
 
 Templating
 	- ng-bind
-	- Expressions and built in variables
-	- Built-in directives: (ng-repeat, ng-model, ng-show/ng-hide, ng-if, ng-<event>)
+	+ Expressions and built in variables
+	+ Built-in directives: (ng-repeat, ng-model, ng-show/ng-hide, ng-if, ng-<event>)
 	- ng-form, ng-href, ng-src as a workarounds for potential issues
 	- ng-include
-	- Forgiving object definition
+	+ Forgiving object definition
 
 Filter concept
-	- Changing presentation, leaving model intact
-	- Built-in filters (json, lowercase/uppercase, number, filter)
-	- Passing params to filters
-	- Chaining filters
-	- Filters pros and cons (performance impact)
+	+ Changing presentation, leaving model intact
+	+ Built-in filters (json, lowercase/uppercase, number, filter)
+	+ Passing params to filters
+	+ Chaining filters
+	+ Filters pros and cons (performance impact)
 
 Service concept
 	- Singltone pattern
@@ -111,6 +104,13 @@ Unit testing service
 Unit testing controller
 
 Unit testing directive
+
+Setting up a very basic project (todo app or something similar)
+	- Git
+	- Github
+	- NodeJS + npm
+	- Grunt
+	- Bower (Why Bower?)
 
 Automated project deployment in depth
 	- npm 
