@@ -51,9 +51,12 @@ Filter concept
 
 Service concept
 	- Singltone pattern
+	- Factory pattern
+	- Provider
 	- Built-in services ($window, $timeout, $interval, $http)
 	- $http service and promise concept
 	- Custom properties of $http promise
+	- $resource service
 	- $q service, deferred objects and custom promises
 
 Routing concept
@@ -71,6 +74,7 @@ Directives in-depth
 	- Compile and Link phases
 	- Transclusion: definition in template, transcluded scope
 	- Nested directives, compiling and linking order
+	- caching external templates (script templates and templateCache)
 
 Components
 	- serving custom directive as a component: possible approaches
@@ -107,7 +111,7 @@ Unit testing directive
 
 Setting up a very basic project (todo app or something similar)
 	- Git
-	- Github
+	- Github / Bitbucket
 	- NodeJS + npm
 	- Grunt
 	- Bower (Why Bower?)
