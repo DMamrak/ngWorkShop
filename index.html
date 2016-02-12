@@ -6,55 +6,42 @@
 
 		<!-- Vendor scripts -->
 		<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
 
 		<!-- Cistom scripts -->
 		<script type="text/javascript" src="js/scripts.js"></script>
 	</head>
-	<body ng-controller="TodoCtrl as todo">
-		<pre class="data">{{todo.planned | json}}</pre>
+	<body ng-controller="MainCtrl as main">
 
-		<div class="list">
-			Search:
-			<input type="text" ng-model="todo.search" />
+		<ul class="tabs">
+			<li class="tab">
+				<a href="#/todo/work">Work</a>
+			</li>
+			<li class="tab">
+				<a href="#/todo/leisure">Leisure</a>
+			</li>
+		</ul>
 
-			Order:
-			<select ng-model="todo.order">
-				<option value="">Default</option>
-				<option value="name">Activity name</option>
-				<option value="type">Activity type</option>
-			</select>
+		<div ng-view />
 
-			<hr />
+		<div class="modal" ng-if="todo.window.show">
+			<div class="window">
+				<form name="edit" ng-submit="todo.update()">
+					<input type="checkbox" ng-model="todo.window.data.done" />
+					<input type="text" ng-model="todo.window.data.name" required />
 
-			<ul>
-				<li
-					ng-repeat="activity in todo.planned | filter:todo.search | orderBy:todo.order"
-					ng-controller="ActivityCtrl"
-					class="activity {{activity.done ? 'done' : 'undone'}}">
-
-					<input type="checkbox" ng-model="activity.done" />
-					{{$index}}.
-					{{activity.name}}
-					|
-					{{activity.type || 'Unknown'}}
-
-					<a href="" title="Edit" ng-click="todo.edit(activity)">[...]</a>
-					<a href="" title="Remove" ng-click="todo.remove(activity)">[X]</a>
-				</li>
-			</ul>
-
-			<hr />
-
-			<form name="add" ng-submit="todo.add()">
-				Add:
-				<input type="checkbox" ng-model="todo.new.done" />
-				<input type="text" ng-model="todo.new.name" required />
-				<select ng-model="todo.new.type" required>
-					<option>Leisure</option>
-					<option>Work</option>
-				</select>
-				<input type="submit" value="Add" ng-disabled="add.$invalid" />
-			</form>
+					<select ng-model="todo.window.data.type" required>
+						<option>Leisure</option>
+						<option>Work</option>
+					</select>
+					
+					<br/><br/>
+					
+					<input type="submit" value="Edit" ng-click="todo.save()" />
+					<input type="button" value="Cancel" ng-click="todo.cancel()" />
+				</form>
+			</div>
 		</div>
+
 	</body>
 </html>

@@ -1,0 +1,23 @@
+[
+	{
+		"name": "Wake up",
+		"done": true,
+		"type": "Leisure"
+	},
+	{
+		"name": "Come to the office",
+		"type": "Work"
+	},
+	{
+		"name": "Drink some coffee",
+		"type": "Leisure"
+	},
+	{
+		"name": "Watch YouTube",
+		"done": false,
+		"type": "Work"
+	},
+	{
+		"name": "Go home"
+	}
+]

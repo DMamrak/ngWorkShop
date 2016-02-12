@@ -1,3 +1,5 @@
+============================== DAY 1 ====================================
+
 AngularJS basics 
 	+ MVC concept, MVVM concept, decoupling data, logic and DOM
 	+ 2-way data binding concept 
@@ -11,8 +13,8 @@ Module concept
 	+ Dependency injection
 		+ ad-hoc serving
 		+ modularity
-		- easy mosking out ($window)
 	+ Main module and Angular application bootstrapping
+	- injecting custom module
 	
 Directive concept basics
 	+ Extending basic HTML with custom elements, attributes and interactions
@@ -32,7 +34,7 @@ Controller concept
 	+ Coupling controller to DOM
 	+ Exposing controller props and methods to view using "as" notation.
 	+ Exposing controller props and methods to view using scope.
-	- Nesting controllers and scopes
+	- Nesting controllers and scopes, calling parent scope methods
 
 Templating
 	- ng-bind
@@ -48,6 +50,11 @@ Filter concept
 	+ Passing params to filters
 	+ Chaining filters
 	+ Filters pros and cons (performance impact)
+	- "Filtered as" syntax
+
+
+
+============================== DAY 2 ====================================
 
 Service concept
 	- Singltone pattern
@@ -60,11 +67,14 @@ Service concept
 	- $q service, deferred objects and custom promises
 
 Routing concept
-	- Config section
+	- Config section: $routeProvider
 	- External templates
+	- Page controllers
 	- Route params
-	- Route events
-	- $location service, no reload on search
+	- Route events ($routeChangeStart, $routeChangeSuccess, $routeChangeError, $routeUpdate)
+	- $location service: .url(), .protocol(), .host(), .path(), .search()
+	- two-way binding between query string and controller data
+	- run section (login case)
 
 Directives in-depth
 	- Directive definition object

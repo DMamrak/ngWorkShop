@@ -1,0 +1,47 @@
+<div class="list">
+	<h1>{{todo.type}}</h1>
+
+	Search:
+	<input type="text" ng-model="todo.query.search" ng-change="todo.filter()" />
+
+	Order:
+	<select ng-model="todo.query.order" ng-change="todo.filter()">
+		<option value="">Default</option>
+		<option value="name">Activity name</option>
+		<option value="type">Activity type</option>
+	</select>
+
+	Showing {{filtered.length}} of {{todo.planned.length}} 
+
+	<hr />
+
+	<ul>
+		<li
+			ng-repeat="activity in todo.planned | filter:todo.query.search | orderBy:todo.query.order as filtered"
+			ng-controller="ActivityCtrl"
+			class="activity {{activity.done ? 'done' : 'undone'}}">
+
+			<input type="checkbox" ng-model="activity.done" />
+			{{$index}}.
+			{{activity.name}}
+			|
+			{{activity.type || 'Unknown'}}
+
+			<a href="" title="Edit" ng-click="todo.edit(activity)">[...]</a>
+			<a href="" title="Remove" ng-click="todo.remove(activity)">[X]</a>
+		</li>
+	</ul>
+
+	<hr />
+
+	<form name="add" ng-submit="todo.add(todo.new)">
+		Add:
+		<input type="checkbox" ng-model="todo.new.done" />
+		<input type="text" ng-model="todo.new.name" required />
+		<select ng-model="todo.new.type" required>
+			<option>Leisure</option>
+			<option>Work</option>
+		</select>
+		<input type="submit" value="Add" ng-disabled="add.$invalid" />
+	</form>
+</div>
