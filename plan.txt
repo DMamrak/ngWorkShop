@@ -34,14 +34,14 @@ Controller concept
 	+ Coupling controller to DOM
 	+ Exposing controller props and methods to view using "as" notation.
 	+ Exposing controller props and methods to view using scope.
-	- Nesting controllers and scopes, calling parent scope methods
+	+ Nesting controllers and scopes, calling parent scope methods
 
 Templating
-	- ng-bind
+	+ ng-bind
 	+ Expressions and built in variables
 	+ Built-in directives: (ng-repeat, ng-model, ng-show/ng-hide, ng-if, ng-<event>)
-	- ng-form, ng-href, ng-src as a workarounds for potential issues
-	- ng-include
+	+ ng-form, ng-href, ng-src as a workarounds for potential issues
+	+ ng-include
 	+ Forgiving object definition
 
 Filter concept
@@ -50,21 +50,27 @@ Filter concept
 	+ Passing params to filters
 	+ Chaining filters
 	+ Filters pros and cons (performance impact)
-	- "Filtered as" syntax
+	+ "Filtered as" syntax
+	- Custom filter
 
 
 
 ============================== DAY 2 ====================================
 
 Service concept
-	- Singltone pattern
-	- Factory pattern
-	- Provider
-	- Built-in services ($window, $timeout, $interval, $http)
-	- $http service and promise concept
-	- Custom properties of $http promise
+	+ Singltone pattern
+	+ Factory pattern
+	+ Provider
+	+ Built-in services ($window, $timeout, $interval, $http)
+	+ $http service and promise concept
+	+ Custom properties of $http promise
 	- $resource service
-	- $q service, deferred objects and custom promises
+	+ $q service, deferred objects and custom promises
+
+
+============================== DAY 3 ====================================
+
+
 
 Routing concept
 	- Config section: $routeProvider
