@@ -66,6 +66,7 @@ Service concept
 	+ Custom properties of $http promise
 	- $resource service
 	+ $q service, deferred objects and custom promises
+	- multiple promises handling
 
 
 ============================== DAY 3 ====================================
@@ -79,8 +80,10 @@ Routing concept
 	- Route params
 	- Route events ($routeChangeStart, $routeChangeSuccess, $routeChangeError, $routeUpdate)
 	- $location service: .url(), .protocol(), .host(), .path(), .search()
+	- Location events: $locationChangeStart, $locationChangeSuccess
 	- two-way binding between query string and controller data
 	- run section (login case)
+	- other sections (?)
 
 Directives in-depth
 	- Directive definition object
