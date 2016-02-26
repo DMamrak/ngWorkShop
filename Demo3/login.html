@@ -1,0 +1,12 @@
+<div>
+	<h1>Login</h1>
+	<form ng-submit="login.login()" ng-if="!login.user.logged">
+		<input type="text" ng-model="login.user.name" ng-required />
+		<input type="password" ng-model="login.user.password" ng-required />
+		<input type="submit" value="Login" />
+	</form>
+	<div ng-if="login.user.logged">
+		<p>You are logged in as {{login.user.name}}</p>
+		<a href="" ng-click="login.logout()">Logout</a>
+	</div>
+</div>

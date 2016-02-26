@@ -1,5 +1,7 @@
 ============================== DAY 1 ====================================
 
+
+
 AngularJS basics 
 	+ MVC concept, MVVM concept, decoupling data, logic and DOM
 	+ 2-way data binding concept 
@@ -57,6 +59,8 @@ Filter concept
 
 ============================== DAY 2 ====================================
 
+
+
 Service concept
 	+ Singltone pattern
 	+ Factory pattern
@@ -67,6 +71,8 @@ Service concept
 	- $resource service
 	+ $q service, deferred objects and custom promises
 	- multiple promises handling
+	- $q.when(), $q.reject()
+
 
 
 ============================== DAY 3 ====================================
@@ -74,21 +80,34 @@ Service concept
 
 
 Routing concept
-	- Config section: $routeProvider
+	- service provider concept on example
+	- hash based navigation (from named anchors to modern techniques)
+	- Config section: $routeProvider, .when(), .otherwise()
+	- run section (login case)
+	- other sections: .value(), .constant()
 	- External templates
 	- Page controllers
-	- Route params
+	- resolve section (waiting for promises to be resolved, error handling)
+	- Route parameters, $routeParams
 	- Route events ($routeChangeStart, $routeChangeSuccess, $routeChangeError, $routeUpdate)
 	- $location service: .url(), .protocol(), .host(), .path(), .search()
+	- chaining $location methods
+	- $location.search().replace()
 	- Location events: $locationChangeStart, $locationChangeSuccess
 	- two-way binding between query string and controller data
-	- run section (login case)
-	- other sections (?)
+	- $http interceptors (login case)
+	- HTML5 navigation 
+
+
+
+============================== DAY 4 ====================================
+
+
 
 Directives in-depth
-	- Directive definition object
+	- Directive definition object: (?)
 	- Templates (internal, external, dynamically set)
-	- Scopes: parent, inherites, isolated. Passing data into isolated scope
+	- Scopes: parent, inherited, isolated. Passing data into isolated scope
 	- Controllers, requesting external controllers
 	- Compile and Link phases
 	- Transclusion: definition in template, transcluded scope

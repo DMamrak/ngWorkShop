@@ -49,7 +49,6 @@ angular.module('demo').controller('LoginCtrl', function($scope, $location, User)
 
 });
 
-
 angular.module('demo').controller('MainCtrl', function($scope, $http){
 	var _this = this;
 
@@ -79,8 +78,6 @@ angular.module('demo').controller('TodoCtrl', function($scope, $http, $routePara
 	$scope.$on('$routeUpdate', function(){
 		_this.query = $location.search();
 	});
-
-
 
 	$http.get('data.json')
 		.success(function(data){

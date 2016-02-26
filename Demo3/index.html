@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="angular.min.js"></script>
+		<script src="angular-route.min.js"></script>
+		<script>
+			angular.module('tmp', ['ngRoute'])
+
+				.config(function($routeProvider, $httpProvider){	
+					$routeProvider
+						.when('/login', {
+							templateUrl: '/login.html',
+							controller: 'LoginCtrl as login',
+							reloadOnSearch: false,
+						})
+						.when('/page', {
+							templateUrl: '/page.html',
+							controller: 'MainCtrl',
+							reloadOnSearch: false,
+							resolve: {
+								data1: function($q, $http){
+									return $q.all([
+										$http.get('1.json'),
+										$http.get('2.json'),
+										$http.get('3.json'),
+									]);
+								},
+								data2: function($q, $http, $timeout){
+									var deferred = $q.defer();
+									$timeout(function(){
+										$http
+											.get('4.json')
+											.then(function(data){
+												deferred.resolve(data);
+											},
+											function(){
+												deferred.reject('error message');	
+											});
+									}, 1000);
+									return deferred.promise;
+								}
+							}
+						})
+						.when('/page/:type', {
+							templateUrl: '/page.html',
+							controller: 'MainCtrl',
+							reloadOnSearch: false,
+							resolve: {
+								data1: function($q, $http){
+									return $q.all([
+										$http.get('1.json'),
+										$http.get('2.json'),
+										$http.get('3.json'),
+									]);
+								},
+								data2: function($q, $http, $timeout){
+									var deferred = $q.defer();
+									$timeout(function(){
+										$http
+											.get('4.json')
+											.then(function(data){
+												deferred.resolve(data);
+											},
+											function(){
+												deferred.reject('error message');	
+											});
+									}, 1000);
+									return deferred.promise;
+								}
+							}
+						})
+						.otherwise('/page');
+
+						$httpProvider.interceptors.push('Interceptor');
+				})
+
+				.run(function($rootScope){
+					$rootScope.$on('$routeChangeStart', function(e){
+						console.log('route change start');
+					});
+					$rootScope.$on('$routeChangeSuccess', function(e){
+						console.log('route change success');
+					});
+					$rootScope.$on('$routeChangeError', function(e){
+						console.log('route change error');
+					});
+				})
+
+				.service('User', function($http){
+					var _this = this;
+					_this.user = null;
+				})
+
+				.service('Interceptor', function(){
+					var _this = this;
+
+					_this.request = function(config){
+						console.log(config);
+						return config;
+					}
+
+					_this.requestError = function(config){
+						return config;
+					}
+
+					_this.response = function(response){
+						console.log(response);
+						return response;
+					}
+
+					_this.responseError = function(response){
+						return response;
+					}
+				})
+
+				.controller('LoginCtrl', function($http, User){
+					var _this = this;
+
+					_this.user = {};
+
+					_this.login = function(){
+						$http
+							.get('login.json', _this.user)
+							.success(function(response){
+								User.logged = _this.user.logged = true;
+								User.name = _this.user.name;
+							});
+					}
+				})
+
+				.controller('MainCtrl', function($scope, $q, $http, $routeParams, $location, data1, data2){
+					console.log('main ctrl starts');
+
+					var results = [];
+
+					$http.get('1.json')
+						.then(function(result){
+							results.push(result);
+							return $q.all([
+								$http.get('2.json'),
+								$http.get('3.json'),
+							]);
+						})
+						.then(function(result){
+							results = results.concat(result);
+							return $http.get('4.json');
+						})
+						.then(function(result){
+							results.push(result);
+							$scope.data = results.map(function(item){
+								return item.data;
+							});
+						});
+
+					$scope.type = $routeParams.type;
+
+					$scope.query = $location.search();
+					$scope.$on('$routeUpdate', function(e){
+						$scope.query = $location.search();
+					});
+
+
+				});
+		</script>
+	</head>
+	<body ng-app="tmp">
+		<div ng-view></div>
+	</body>
+</html>
