@@ -70,8 +70,8 @@ Service concept
 	+ Custom properties of $http promise
 	- $resource service
 	+ $q service, deferred objects and custom promises
-	- multiple promises handling
-	- $q.when(), $q.reject()
+	+ multiple promises handling
+	+ $q.when(), $q.reject()
 
 
 
@@ -80,21 +80,20 @@ Service concept
 
 
 Routing concept
-	- service provider concept on example
-	- hash based navigation (from named anchors to modern techniques)
-	- Config section: $routeProvider, .when(), .otherwise()
-	- run section (login case)
-	- other sections: .value(), .constant()
-	- External templates
-	- Page controllers
-	- resolve section (waiting for promises to be resolved, error handling)
-	- Route parameters, $routeParams
-	- Route events ($routeChangeStart, $routeChangeSuccess, $routeChangeError, $routeUpdate)
-	- $location service: .url(), .protocol(), .host(), .path(), .search()
-	- chaining $location methods
-	- $location.search().replace()
+	+ service provider concept on example
+	+ hash based navigation (from named anchors to modern techniques)
+	+ Config section: $routeProvider, .when(), .otherwise()
+	+ run section (login case)
+	+ other sections: .value(), .constant()
+	+ External templates
+	+ Page controllers
+	+ resolve section (waiting for promises to be resolved, error handling)
+	+ Route parameters, $routeParams
+	+ Route events ($routeChangeStart, $routeChangeSuccess, $routeChangeError, $routeUpdate)
+	+ $location service: .url(), .protocol(), .host(), .path(), .search()
+	+ chaining $location methods: $location.search().replace()
 	- Location events: $locationChangeStart, $locationChangeSuccess
-	- two-way binding between query string and controller data
+	+ two-way binding between query string and controller data
 	- $http interceptors (login case)
 	- HTML5 navigation 
 
