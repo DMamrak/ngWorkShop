@@ -94,7 +94,7 @@ Routing concept
 	+ chaining $location methods: $location.search().replace()
 	- Location events: $locationChangeStart, $locationChangeSuccess
 	+ two-way binding between query string and controller data
-	- $http interceptors (login case)
+	+ $http interceptors (login case)
 	- HTML5 navigation 
 
 
@@ -104,12 +104,12 @@ Routing concept
 
 
 Directives in-depth
-	- Directive definition object:
-		- restrict: 'AECM'
-		- replace: Boolean
-		- template: String / Function
-		- templateUrl: String / Function
-		- scope: Boolean / Object
+	+ Directive definition object:
+		+ restrict: 'AECM'
+		+ replace: Boolean
+		+ template: String / Function
+		+ templateUrl: String / Function
+		+ scope: Boolean / Object
 		- controller: Function / String
 		- require
 		- compile: Function (returning object)
@@ -119,8 +119,8 @@ Directives in-depth
 		- transclude
 
 	- Templateless directives
-	- Templates (internal, external, dynamically set)
-	- Scopes: parent, inherited, isolated. Passing data into isolated scope:
+	+ Templates (internal, external, dynamically set)
+	+ Scopes: parent, inherited, isolated. Passing data into isolated scope:
 		- '@' attrs
 		- '=' bindings
 		- '&' expression
