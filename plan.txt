@@ -126,7 +126,7 @@ Directives in-depth
 		- '&' expression
 	- Controllers, requiring external controllers:
 		- share a controller
-		- require a controller
+		- share the same instance of a controller (require, ?, ^^)
 		- controllerAs: string
 		- bindToController: Boolean
 

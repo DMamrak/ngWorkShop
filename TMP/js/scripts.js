@@ -211,10 +211,13 @@ angular.module('todo').directive('dir', function(){
 		},
 		transclude: true,
 		template: '<div>Mydir: <span ng-transclude></span> / {{title}} </div>',
-		controller: function($scope){
+		controller: function($scope, $transclude){
 			this.scope = $scope;
 			console.log($scope);
 			console.log('controller', arguments);
+			$transclude(function($tscope, $telement){
+				console.log('$transclude', arguments);
+			});
 		},
 		compile: function(){
 			console.log('compile', arguments);
