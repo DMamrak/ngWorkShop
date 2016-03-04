@@ -11,7 +11,7 @@ angular.module('todo').config(function($routeProvider, $httpProvider){
 		})
 		.when('/todo', {
 			templateUrl: 'tpl/todo.html',
-			controller: 'TodoCtrl as todos',
+			controller: 'TodoCtrl',
 			reloadOnSearch: false,
 			resolve: {
 				User: 'SessionResolver'
@@ -23,7 +23,7 @@ angular.module('todo').config(function($routeProvider, $httpProvider){
 });
 
 angular.module('todo').run(function($rootScope, $location){
-	$rootScope.$on('$routeChangeError', function(e, prev, next){
+	$rootScope.$on('$routeChangeSuccess', function(e, prev, next){
 		console.log('error')
 		//$location.path('/login');
 	});
@@ -140,40 +140,44 @@ angular.module('todo').controller('LoginCtrl', function(Loader, User){
 });
 
 angular.module('todo').controller('TodoCtrl', function($scope, $location, $http, Loader){
-	var _this = this;
+	//var _this = this;
 
-	_this.activities = [];
-	_this.current = {};
+	$scope.activities = [];
+	$scope.current = {};
 
-	_this.query = $location.search();
+	$scope.query = $location.search();
 	$scope.$on('$routeUpdate', function(e){
-		_this.query = $location.search();
+		$scope.query = $location.search();
 	})
 
 	Loader
 		.get('todos')
 		.then(function(result){
-			_this.activities = result;
+			$scope.activities = result;
 		});
 
-	_this.queryUpdate = function(){
-		$location.search(_this.query);
+	$scope.queryUpdate = function(){
+		$location.search($scope.query);
 	};
 
-	_this.add = function(){
-		var activities = _this.activities.concat([_this.current]);
+	$scope.add = function(){
+		var activities = $scope.activities.concat([$scope.current]);
 		debugger
 		Loader
 			.post('todos', activities)
 			.then(function(){
-				_this.activities.push(_this.current);
-				_this.current = {};
+				$scope.activities.push($scope.current);
+				$scope.current = {};
 			});
 	};
 
-	_this.remove = function(){
+	$scope.remove = function(){
 
 	};
+
+	$scope.submit = function(){
+		console.log('submit');
+	}
 
 
 
@@ -202,6 +206,30 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 
 });
 
+
+angular.module('todo').directive('xtWin', function(){
+	return {
+		restrict: 'AE',
+		replace: true,
+		scope: {
+			title: '@heading',
+			todos: '=',
+			push: '&',
+		},
+		templateUrl: function($element, $attrs){
+			return $attrs.template;
+		},
+		link: function($scope, $element, $attrs){
+			$scope.ok = function(){
+
+				$scope.push();
+			};
+		}
+	};
+});
+
+
+/*
 angular.module('todo').directive('dir', function(){
 	return {
 		replace: true,
@@ -245,3 +273,4 @@ angular.module('todo').directive('dir2', function(){
 
 	};
 });
+*/

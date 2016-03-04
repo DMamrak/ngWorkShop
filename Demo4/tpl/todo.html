@@ -2,27 +2,27 @@
 	<h1>Todo</h1>
 
 	<div class="filters">
-		<input type="text" ng-model="todos.query.name" ng-change="todos.queryUpdate()" />
+		<input type="text" ng-model="query.name" ng-change="queryUpdate()" />
 
-		<select ng-model="todos.query.type" ng-change="todos.queryUpdate()">
+		<select ng-model="query.type" ng-change="queryUpdate()">
 			<option value="">All</option>
 			<option value="name">Work</option>
 			<option value="done">Leisure</option>
 		</select>
 
-		<select ng-model="todos.query.done" ng-change="todos.queryUpdate()">
+		<select ng-model="query.done" ng-change="queryUpdate()">
 			<option value="">All</option>
 			<option value="true">Done</option>
 			<option value="false">Undone</option>
 		</select>
 		
-		Showing {{filtered.length}} of {{todos.activities.length}}
+		Showing {{filtered.length}} of {{activities.length}}
 	</div>
 
 	<ul class="todos">
 		<li ng-if="!filtered.length" class="item">No data</li>
 		<li
-			ng-repeat="activity in todos.activities | filter:todos.search | orderBy:todos.order as filtered"
+			ng-repeat="activity in activities | filter:search | orderBy:order as filtered"
 			class="item {{ activity.done ? 'done' : 'undone' }}">
 			
 			<input type="checkbox" ng-model="activity.done">
@@ -32,15 +32,15 @@
 		</li>
 	</ul>
 
-	<form ng-submit="todos.add()" name="todoData" novalidate>
+	<form ng-submit="add()" name="todoData" novalidate>
 		<div class="item">
 			<label>Activity name:</label>
-			<input type="text" ng-model="todos.current.name" required />	
+			<input type="text" ng-model="current.name" required />	
 		</div>
 		
 		<div class="item">
 			<label>Activity type:</label>
-			<select ng-model="todos.current.type" required>
+			<select ng-model="current.type" required>
 				<option value=""></option>
 				<option value="work">Work</option>
 				<option value="leisure">Leisure</option>
@@ -50,13 +50,5 @@
 		<input type="submit" value=" + " ng-disabled="todoData.$invalid" />
 	</form>
 
-	<dir index="1" dir2>
-		<dir index="2">
-			<dir index="3" dir2></dir>
-		</dir>
-	</dir>
-	
-	<dir>
-		<div index="5" dir2></div>
-	</dir>
+	<xt-win class="dir2" template="tpl/xt-win.html" heading="Edit" todos="activities" push="submit()"></xt-win>
 </div>
