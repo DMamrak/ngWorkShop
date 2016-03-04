@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html ng-app="todo">
 	<head>
-		<link rel="stylesheet" type="text/css" href="styles.css">
-		<script type="text/javascript" src="angular.min.js"></script>
-		<script type="text/javascript" src="angular-route.min.js"></script>
-		<script type="text/javascript" src="scripts.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/reset.css">
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+
+		<script type="text/javascript" src="js/angular.min.js"></script>
+		<script type="text/javascript" src="js/angular-route.min.js"></script>
+		<script type="text/javascript" src="js/scripts.js"></script>
 	</head>
 	<body>
-		<div ng-view></div>
+		<header ng-controller="HeaderCtrl as menu">
+			<nav class="menu">
+				<a href="#/login" class="item {{menu.path == 'login' ? 'active' : 'inactive'}}">Login</a>
+				<a href="#/todo" class="item  {{menu.path == 'todo' ? 'active' : 'inactive'}}">Todo</a>
+			</nav>
+		</header>
+
+		<div ng-view class="content"></div>
 	</body>
 </html>

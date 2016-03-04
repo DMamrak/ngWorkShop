@@ -104,13 +104,38 @@ Routing concept
 
 
 Directives in-depth
-	- Directive definition object: (?)
+	- Directive definition object:
+		- restrict: 'AECM'
+		- replace: Boolean
+		- template: String / Function
+		- templateUrl: String / Function
+		- scope: Boolean / Object
+		- controller: Function / String
+		- require
+		- compile: Function (returning object)
+		- prelink: Function
+		- postlink (link): Function
+		- priority
+		- transclude
+
+	- Templateless directives
 	- Templates (internal, external, dynamically set)
-	- Scopes: parent, inherited, isolated. Passing data into isolated scope
-	- Controllers, requesting external controllers
+	- Scopes: parent, inherited, isolated. Passing data into isolated scope:
+		- '@' attrs
+		- '=' bindings
+		- '&' expression
+	- Controllers, requiring external controllers:
+		- share a controller
+		- require a controller
+		- controllerAs: string
+		- bindToController: Boolean
+
 	- Compile and Link phases
-	- Transclusion: definition in template, transcluded scope
+
+	- Transclusion (trans inclusion): definition in template, transcluded scope, transcludeFn
+	
 	- Nested directives, compiling and linking order
+	
 	- caching external templates (script templates and templateCache)
 
 Components
