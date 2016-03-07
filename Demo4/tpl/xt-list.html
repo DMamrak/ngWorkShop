@@ -1,0 +1,15 @@
+<ul class="list todos">
+	<li ng-if="!data.length" class="item">No data</li>
+	<li
+		ng-repeat="activity in activities | filter:{name: filters.name, type: filters.type, done: filters.done} as filtered"
+		class="item {{ activity.done ? 'done' : 'undone' }}">
+		
+		<input type="checkbox" ng-model="activity.done">
+		<span class="text">{{$index + 1}}. {{activity.name}} ({{activity.type}})</span>
+
+		<div class="controls">
+			<input type="button" value="..." ng-click="edit(activity)" />
+			<input type="button" value="X" ng-click="remove(activity)" />
+		</div>
+	</li>
+</ul>

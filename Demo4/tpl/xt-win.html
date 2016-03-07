@@ -1,11 +1,10 @@
 <div class="modalbg">
 	<div class="window">
-		<h1>{{title}}</h1>
-
-		<pre>{{todos | json}}</pre>
-
-		<div class="actions">
+		<h1 class="heading">{{title}}</h1>
+		<div class="transcluded" ng-transclude></div>
+		<div class="controls">
 			<input type="button" value="Submit" ng-click="submit()" />
+			<input type="button" value="Cancel" ng-click="cancel()" />
 		</div>
 	</div>
 </div>

@@ -60,11 +60,11 @@ angular.module('todo').service('SessionResolver', function($location, Loader){
 		.get('user')
 		.then(
 			function(user){
-				console.log('resolve success')
+				console.log('resolve success');
 				return user;
 			},
 			function(){
-				console.log('resolve error')
+				console.log('resolve error');
 				return false;
 			}
 		);
@@ -76,6 +76,7 @@ angular.module('todo').service('Loader', function($q, $timeout){
 	_this.get = function(name){
 		var result = sessionStorage.getItem(name);
 		var deferred = $q.defer();
+		var timeout = Math.round(Math.random() * 1000);
 
 		$timeout(function(){
 			if(result){
@@ -83,12 +84,13 @@ angular.module('todo').service('Loader', function($q, $timeout){
 			}else{
 				deferred.reject();
 			}
-		}, 500);
+		}, timeout);
 
 		return deferred.promise;
 	};
 
 	_this.post = function(name, data){
+		var timeout = Math.round(Math.random() * 1000);
 		if(data){
 			sessionStorage.setItem(name, angular.toJson(data));
 		}else{
@@ -99,7 +101,7 @@ angular.module('todo').service('Loader', function($q, $timeout){
 
 		$timeout(function(){
 			deferred.resolve();
-		}, 500);
+		}, timeout);
 
 		return deferred.promise;
 	};
@@ -139,92 +141,157 @@ angular.module('todo').controller('LoginCtrl', function(Loader, User){
 	};
 });
 
-angular.module('todo').controller('TodoCtrl', function($scope, $location, $http, Loader){
-	//var _this = this;
 
+// Todos page main controller
+angular.module('todo').controller('TodoCtrl', function($scope, $location, $http, $timeout, Loader){
+	'use strict';
+
+	// Declaring initial values
 	$scope.activities = [];
 	$scope.current = {};
+	$scope.dialog = {
+		show: false,
+	};
 
-	$scope.query = $location.search();
+	var activities = [];
+
+	// Binding $scope.filters to the URL query string for deep linking
+	$scope.filters = $location.search();
 	$scope.$on('$routeUpdate', function(e){
-		$scope.query = $location.search();
-	})
+		$scope.filters = $location.search();
+	});
 
+	// Fetching the data
 	Loader
-		.get('todos')
+		.get('activities')
 		.then(function(result){
 			$scope.activities = result;
 		});
 
-	$scope.queryUpdate = function(){
-		$location.search($scope.query);
+	// Binding URL query string to the $scope.filters for deep linking
+	$scope.updateURL = function(){
+		$location.search($scope.filters);
 	};
 
+	// Adding an item
 	$scope.add = function(){
-		var activities = $scope.activities.concat([$scope.current]);
-		debugger
+		$scope.dialog.show = true;
+		activities = $scope.activities.concat([$scope.current]);
+	};
+
+	// Editing an item
+	$scope.edit = function(selected){
+		$scope.dialog.show = true;
+		$scope.current = angular.copy(selected);
+		activities = $scope.activities.map(function(item){
+			return item != selected ? item : $scope.current;
+		});
+	};
+
+	// Removing an item
+	$scope.remove = function(selected){
+		activities = $scope.activities.filter(function(item){
+			return item != selected;
+		});
+		save(activities);
+	};
+
+
+	$scope.change = function($event, item){
+		console.log('change: ', $event, item.done);
+	};
+
+	// Toggling activity status
+	$scope.toggle = function($event, item){
+		console.log('click: ', $event, item.done);
+	};
+
+	// Submitting action
+	$scope.submit = function(){
+		$scope.current = {};
+		$scope.dialog.show = false;
+		save(activities);
+	};
+
+	// Canceling action
+	$scope.cancel = function(){
+		$scope.current = {};
+		$scope.dialog.show = false;
+	};
+
+	// Saving items list on the "server side"
+	function save(){
 		Loader
-			.post('todos', activities)
+			.post('activities', activities)
 			.then(function(){
-				$scope.activities.push($scope.current);
+				$scope.activities = activities;
 				$scope.current = {};
 			});
-	};
-
-	$scope.remove = function(){
-
-	};
-
-	$scope.submit = function(){
-		console.log('submit');
 	}
-
-
-
-	$http
-		.get('data/data1.json')
-		.then(function(result){
-
-			return 	Promise.all([
-				Promise.resolve(result),
-				$http.get('data/data2.json'),
-				$http.get('data/data3.json'),
-			])
-		})
-		.then(
-			function(results){
-				var data = results.map(function(item){
-					return item.data[0];
-				});
-
-				console.log(data);
-			},
-			function(error){
-
-				$q.reject('error messages')
-			});
-
 });
 
 
+// Multipurpose dialog window component
 angular.module('todo').directive('xtWin', function(){
 	return {
-		restrict: 'AE',
+		restrict: 'E',
 		replace: true,
+		transclude: true,
 		scope: {
-			title: '@heading',
-			todos: '=',
-			push: '&',
+			title: '@title',
+			submit: '&submit',
+			cancel: '&cancel',
 		},
 		templateUrl: function($element, $attrs){
 			return $attrs.template;
 		},
 		link: function($scope, $element, $attrs){
-			$scope.ok = function(){
 
-				$scope.push();
+		}
+	};
+});
+
+
+// Multipurpose filters component
+angular.module('todo').directive('xtFilters', function(){
+	return {
+		restrict: 'E',
+		replace: true,
+		scope: {
+			filters: '=filters',
+			change: '&change',
+		},
+		templateUrl: function($element, $attrs){
+			return $attrs.template;
+		},
+		link: function($scope, $element, $attrs){
+			// Clearing the filters
+			$scope.clear = function(){
+				$scope.filters = {};
+				$scope.change();
 			};
 		}
+	};
+});
+
+
+// Returns the length of given object
+// using either built in "length" property
+// or enumerable keys number
+angular.module('todo').filter('length', function(){
+	return function(input){
+		var result;
+		if(input){
+			result = 0;
+			if(input.length){
+				result = input.length;
+			}else{
+				for(var key in input){
+					result += 1;
+				}
+			}
+		}
+		return result;
 	};
 });
 

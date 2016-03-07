@@ -1,54 +1,56 @@
 <div>
 	<h1>Todo</h1>
 
-	<div class="filters">
-		<input type="text" ng-model="query.name" ng-change="queryUpdate()" />
+	<xt-filters
+			template="tpl/xt-filters.html"
+			filters="filters"
+			change="updateURL()">
+	</xt-filters>
+	
+	<p>Showing {{filtered.length}} of {{activities.length}}</p>
 
-		<select ng-model="query.type" ng-change="queryUpdate()">
-			<option value="">All</option>
-			<option value="name">Work</option>
-			<option value="done">Leisure</option>
-		</select>
-
-		<select ng-model="query.done" ng-change="queryUpdate()">
-			<option value="">All</option>
-			<option value="true">Done</option>
-			<option value="false">Undone</option>
-		</select>
-		
-		Showing {{filtered.length}} of {{activities.length}}
-	</div>
-
-	<ul class="todos">
+	<ul class="list todos">
 		<li ng-if="!filtered.length" class="item">No data</li>
 		<li
-			ng-repeat="activity in activities | filter:search | orderBy:order as filtered"
+			ng-repeat="activity in activities | filter:{name: filters.name, type: filters.type, done: filters.done} as filtered"
 			class="item {{ activity.done ? 'done' : 'undone' }}">
 			
-			<input type="checkbox" ng-model="activity.done">
-			{{$index + 1}}.
-			{{activity.name}}
-			({{activity.type}})
+			<input type="checkbox" id="list_item_{{$index}}" ng-model="activity.done" ng-change="change($event, activity)" ng-click="toggle($event, activity)">
+			<label class="text" for="list_item_{{$index}}" ng-click="toggle($event, activity)">
+					{{$index + 1}}. {{activity.name}} ({{activity.type}})
+			</label>
+
+			<div class="controls">
+				<input type="button" value="..." ng-click="edit(activity)" />
+				<input type="button" value="X" ng-click="remove(activity)" />
+			</div>
 		</li>
 	</ul>
 
-	<form ng-submit="add()" name="todoData" novalidate>
-		<div class="item">
-			<label>Activity name:</label>
-			<input type="text" ng-model="current.name" required />	
-		</div>
-		
-		<div class="item">
-			<label>Activity type:</label>
-			<select ng-model="current.type" required>
-				<option value=""></option>
-				<option value="work">Work</option>
-				<option value="leisure">Leisure</option>
-			</select>
-		</div>
-
-		<input type="submit" value=" + " ng-disabled="todoData.$invalid" />
-	</form>
-
-	<xt-win class="dir2" template="tpl/xt-win.html" heading="Edit" todos="activities" push="submit()"></xt-win>
+	<input type="submit" value="Add new item" ng-click="add()" />
+	
+	<xt-win
+			template="tpl/xt-win.html"
+			title="{{(current | length) ? 'Edit' : 'Add'}} an item"
+			submit="submit()"
+			cancel="cancel()"
+			ng-if="dialog.show">
+		<!-- External window content -->
+		<form ng-submit="add()" name="todoData" novalidate>
+			<div class="item">
+				<label>Activity name:</label>
+				<input type="text" ng-model="current.name" required />	
+			</div>
+			
+			<div class="item">
+				<label>Activity type:</label>
+				<select ng-model="current.type" required>
+					<option value=""></option>
+					<option value="work">Work</option>
+					<option value="leisure">Leisure</option>
+				</select>
+			</div>
+		</form>
+		<!-- /External window content -->
+	</xt-win>
 </div>
