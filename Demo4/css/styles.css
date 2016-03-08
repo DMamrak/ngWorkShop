@@ -68,7 +68,15 @@ label[for]
 
 
 
-/* Content */
+/* Layout */
+
+.header .menu,
+.content
+{
+	width: 1024px;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
 
 .content {
 	padding: 15px;
@@ -104,6 +112,11 @@ form .item select.ng-touched.ng-invalid
 
 /* Filters */
 
+.filters {
+	padding: 10px;
+	background-color: #EEEEEE;
+}
+
 .filters input[type="text"],
 .filters select
 {
@@ -115,7 +128,6 @@ form .item select.ng-touched.ng-invalid
 /* Todos */
 
 .todos {
-	width: 500px;
 	margin: 15px 0;
 }
 

@@ -107,6 +107,8 @@ angular.module('todo').service('Loader', function($q, $timeout){
 	};
 });
 
+
+// Tiny controller to expose current page to the main menu
 angular.module('todo').controller('HeaderCtrl', function($scope, $location){
 	var _this = this;
 
@@ -116,6 +118,8 @@ angular.module('todo').controller('HeaderCtrl', function($scope, $location){
 	});
 });
 
+
+// Login page main controller
 angular.module('todo').controller('LoginCtrl', function(Loader, User){
 	var _this = this;
 	_this.user = User;
@@ -146,22 +150,30 @@ angular.module('todo').controller('LoginCtrl', function(Loader, User){
 angular.module('todo').controller('TodoCtrl', function($scope, $location, $http, $timeout, Loader){
 	'use strict';
 
-	// Declaring initial values
+	// Declaring initial values:
+	// Todos (activities) list
 	$scope.activities = [];
+	// Selected list item
 	$scope.current = {};
+	// Dialog window state
 	$scope.dialog = {
 		show: false,
 	};
 
+	// Temporary storage for changed $scope.activities version.
+	// Made in order to prevent changing the real model instantly,
+	// and apply changes only after successfully posting them to the server.
 	var activities = [];
 
 	// Binding $scope.filters to the URL query string for deep linking
+	// Gettin the initial value from the URL first
 	$scope.filters = $location.search();
+	// Tnen updating the value each time user changes the URL manually
 	$scope.$on('$routeUpdate', function(e){
 		$scope.filters = $location.search();
 	});
 
-	// Fetching the data
+	// Fetching the list and exposing it to the template
 	Loader
 		.get('activities')
 		.then(function(result){
@@ -169,19 +181,22 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 		});
 
 	// Binding URL query string to the $scope.filters for deep linking
+	// This function is called whenever filters are changed
 	$scope.updateURL = function(){
 		$location.search($scope.filters);
 	};
 
-	// Adding an item
+	// Adding an item to the list
 	$scope.add = function(){
 		$scope.dialog.show = true;
+		// Creating separated activities model to prevent immediate model change
 		activities = $scope.activities.concat([$scope.current]);
 	};
 
 	// Editing an item
 	$scope.edit = function(selected){
 		$scope.dialog.show = true;
+		// Creating separated activities model to prevent immediate model change
 		$scope.current = angular.copy(selected);
 		activities = $scope.activities.map(function(item){
 			return item != selected ? item : $scope.current;
@@ -190,6 +205,7 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 
 	// Removing an item
 	$scope.remove = function(selected){
+		// Creating separated activities model to prevent immediate model change
 		activities = $scope.activities.filter(function(item){
 			return item != selected;
 		});
@@ -224,6 +240,7 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 		Loader
 			.post('activities', activities)
 			.then(function(){
+				// Applying changes to the model after successfully saving them
 				$scope.activities = activities;
 				$scope.current = {};
 			});
@@ -270,6 +287,52 @@ angular.module('todo').directive('xtFilters', function(){
 				$scope.filters = {};
 				$scope.change();
 			};
+		}
+	};
+});
+
+
+// Templateless directive
+// connects jQuery date picker
+// to the Angular application
+angular.module('todo').directive('xtPikaday', function(){
+	return {
+		restrict: 'A',
+		scope: true,
+		link: function($scope, $element, $attrs){
+			// Getting a reference to the DOM element, not jQuery wrapper
+			var element = $element[0];
+			// Getting format string from directive attribute
+			var format  = $attrs.xtPikaday; 
+			
+			// Making new datepicker
+			var picker = new Pikaday({
+				field: element,
+				format: format,
+				onOpen: open,
+				onSelect: select,
+			});
+
+			// Listening to the destroy events in order to destroy datepicker properly
+			$scope.$on('$destroy', destroy);
+
+			function open(){
+				// Making datepisker show proper date on opening
+				var date = $element.val();
+				picker.setDate(date);
+			}
+
+			function select(){
+				// Starting digest loop whenever user selects a date
+				$scope.$digest();
+			}
+
+			function destroy(){
+				// Calling interna; datepicker .destroy() method
+				// in order to remove listeners and DOM nodes
+				// when directive is about to be destroyed.
+				picker.destroy();
+			}
 		}
 	};
 });

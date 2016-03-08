@@ -2,15 +2,18 @@
 <html ng-app="todo">
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/reset.css">
+		<link rel="stylesheet" type="text/css" href="css/pikaday.css">
 		<link rel="stylesheet" type="text/css" href="css/styles.css">
 
+		<script type="text/javascript" src="js/moment.js"></script>
+		<script type="text/javascript" src="js/pikaday.js"></script>
 		<script type="text/javascript" src="js/angular.min.js"></script>
 		<script type="text/javascript" src="js/angular-route.min.js"></script>
 		<script type="text/javascript" src="js/scripts.js"></script>
 	</head>
 	<body>
-		<header ng-controller="HeaderCtrl as menu">
-			<nav class="menu">
+		<header class="header">
+			<nav class="menu" ng-controller="HeaderCtrl as menu">
 				<a href="#/login" class="item {{menu.path == 'login' ? 'active' : 'inactive'}}">Login</a>
 				<a href="#/todo" class="item  {{menu.path == 'todo' ? 'active' : 'inactive'}}">Todo</a>
 			</nav>

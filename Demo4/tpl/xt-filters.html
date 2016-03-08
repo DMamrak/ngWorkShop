@@ -16,5 +16,21 @@
 		<option value="false">Undone</option>
 	</select>
 	
+	<label>Due date:</label>
+	<input
+		type="text"
+		placeholder="from"
+		ng-model="filters.from"
+		ng-change="change()"
+		ng-model-options="{updateOn: 'change'}"
+		xt-pikaday="DD.MMM.YYYY"/>
+	<input
+		type="text"
+		placeholder="to"
+		ng-model="filters.to"
+		ng-change="change()"
+		ng-model-options="{updateOn: 'change'}"
+		xt-pikaday="DD.MMM.YYYY"/>
+
 	<input type="button" value="X" ng-click="clear()" />
 </div>
