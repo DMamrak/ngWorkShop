@@ -97,7 +97,7 @@ form .item:last-child {
 	margin-bottom: 0;
 }
 
-form .item label {
+form .item label:not([for]) {
 	display: block;
 	margin-bottom: 5px;
 }
