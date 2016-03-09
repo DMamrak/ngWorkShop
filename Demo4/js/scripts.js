@@ -6,15 +6,28 @@ angular.module('todo').config(function($routeProvider, $httpProvider){
 			templateUrl: 'tpl/login.html',
 			controller: 'LoginCtrl as login',
 			resolve: {
-				User: 'SessionResolver'
-			}
+				User: function(User){
+					return User.get()
+						.then(
+							function(response){
+								return response;
+							},
+							function(){
+								return false;
+							}
+						);
+				}
+			},
+			resolveAs: 'User'
 		})
 		.when('/todo', {
 			templateUrl: 'tpl/todo.html',
 			controller: 'TodoCtrl',
 			reloadOnSearch: false,
 			resolve: {
-				User: 'SessionResolver'
+				User: function(User){
+					return User.get();
+				}
 			},
 		})
 		.otherwise('/login');
@@ -23,9 +36,13 @@ angular.module('todo').config(function($routeProvider, $httpProvider){
 });
 
 angular.module('todo').run(function($rootScope, $location){
-	$rootScope.$on('$routeChangeSuccess', function(e, prev, next){
-		console.log('error')
-		//$location.path('/login');
+	$rootScope.$on('$routeChangeSuccess', function(){
+		console.log('$routeChangeSuccess');
+	});
+
+	$rootScope.$on('$routeChangeError', function(){
+		$location.path('/login');
+		console.log('$routeChangeError');
 	});
 });
 
@@ -33,47 +50,51 @@ angular.module('todo').service('SessionInterceptor', function(){
 	var _this = this;
 
 	_this.request = function(config){
-		console.log(config)
 		return config;
 	};
 
 	_this.requestError = function(error){
-		console.log(error)
 		return error;
 	};
 
 	_this.response = function(response){
-		console.log(response)
 		return response;
 	};
 
 	_this.responseError = function(error){
-		console.log(error)
 		return error;
 	};
 
 });
 
-angular.module('todo').service('SessionResolver', function($location, Loader){
-	console.log('resolving');
-	return Loader
-		.get('user')
-		.then(
-			function(user){
-				console.log('resolve success');
-				return user;
-			},
-			function(){
-				console.log('resolve error');
-				return false;
-			}
-		);
+angular.module('todo').service('User', function($location, Loader){
+	var _this = this;
+
+	_this.get = function(){
+		return Loader.get('user');
+			/*
+			.then(
+				function(user){
+					console.log('resolve success');
+					return user;
+				},
+				function(){
+					console.log('resolve error');
+					//$location.path('/login');
+					return false;
+				}
+			);
+			*/
+	};
 });
 
 angular.module('todo').service('Loader', function($q, $timeout){
 	var _this = this;
 
+	_this.busy = false;
+
 	_this.get = function(name){
+		_this.busy = true;
 		var result = sessionStorage.getItem(name);
 		var deferred = $q.defer();
 		var timeout = Math.round(Math.random() * 1000);
@@ -84,12 +105,14 @@ angular.module('todo').service('Loader', function($q, $timeout){
 			}else{
 				deferred.reject();
 			}
+			_this.busy = false;
 		}, timeout);
 
 		return deferred.promise;
 	};
 
 	_this.post = function(name, data){
+		_this.busy = true;
 		var timeout = Math.round(Math.random() * 1000);
 		if(data){
 			sessionStorage.setItem(name, angular.toJson(data));
@@ -101,6 +124,7 @@ angular.module('todo').service('Loader', function($q, $timeout){
 
 		$timeout(function(){
 			deferred.resolve();
+			_this.busy = false;
 		}, timeout);
 
 		return deferred.promise;
@@ -123,6 +147,8 @@ angular.module('todo').controller('HeaderCtrl', function($scope, $location){
 angular.module('todo').controller('LoginCtrl', function(Loader, User){
 	var _this = this;
 	_this.user = User;
+
+	console.log(User);
 
 	_this.login = function(){
 		Loader
@@ -213,13 +239,12 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 	};
 
 
-	$scope.change = function($event, item){
-		console.log('change: ', $event, item.done);
-	};
-
 	// Toggling activity status
-	$scope.toggle = function($event, item){
-		console.log('click: ', $event, item.done);
+	$scope.toggle = function(item){
+		save($scope.activities)
+			.then(null, function(){
+				item.done = !item.done;
+			});
 	};
 
 	// Submitting action
@@ -236,9 +261,8 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 	};
 
 	// Saving items list on the "server side"
-	function save(){
-		Loader
-			.post('activities', activities)
+	function save(activities){
+		return Loader.post('activities', activities)
 			.then(function(){
 				// Applying changes to the model after successfully saving them
 				$scope.activities = activities;
@@ -248,12 +272,33 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 });
 
 
+// Simple directive to show / hide the spinner while loader is busy
+angular.module('todo').directive('xtLoader', function(Loader){
+	return {
+		restrict: 'E',
+		replace: true,
+		scope: {},
+		templateUrl: function($element, $attrs){
+			return $attrs.template;
+		},
+		link: function($scope, $element, $attrs){
+			$scope.loader = Loader;
+		},
+	};
+});
+
+
 // Multipurpose dialog window component
 angular.module('todo').directive('xtWin', function(){
 	return {
 		restrict: 'E',
 		replace: true,
 		transclude: true,
+		controller: function($scope){
+			var _this = this;
+
+			_this.scope = $scope;
+		},
 		scope: {
 			title: '@title',
 			submit: '&submit',
@@ -262,12 +307,26 @@ angular.module('todo').directive('xtWin', function(){
 		templateUrl: function($element, $attrs){
 			return $attrs.template;
 		},
-		link: function($scope, $element, $attrs){
+		link: function($scope, $element, $attrs, $ctrl, $transclude){
+			console.log($transclude);
 
-		}
+			$transclude($scope, function($element, $scope){
+				console.log($element, $scope)
+			});
+		},
 	};
 });
 
+
+angular.module('todo').directive('xtForm', function(){
+	return {
+		restrict: 'A',
+		require: 'xtWin',
+		link: function($scope, $element, $attrs, $ctrl){
+			console.log($ctrl);
+		}
+	};
+});
 
 // Multipurpose filters component
 angular.module('todo').directive('xtFilters', function(){
@@ -328,7 +387,7 @@ angular.module('todo').directive('xtPikaday', function(){
 			}
 
 			function destroy(){
-				// Calling interna; datepicker .destroy() method
+				// Calling internal datepicker .destroy() method
 				// in order to remove listeners and DOM nodes
 				// when directive is about to be destroyed.
 				picker.destroy();

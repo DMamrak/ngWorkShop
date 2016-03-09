@@ -13,10 +13,14 @@
 		<li ng-if="!filtered.length" class="item">No data</li>
 		<li
 			ng-repeat="activity in activities | filter:{name: filters.name, type: filters.type, done: filters.done} as filtered"
-			class="item {{ activity.done ? 'done' : 'undone' }}">
+			class="item {{activity.done ? 'done' : 'undone'}}">
 			
-			<input type="checkbox" id="list_item_{{$index}}" ng-model="activity.done" ng-change="change($event, activity)" ng-click="toggle($event, activity)">
-			<label class="text" for="list_item_{{$index}}" ng-click="toggle($event, activity)">
+			<input
+				type="checkbox"
+				id="list_item_{{$index}}"
+				ng-model="activity.done"
+				ng-change="toggle(activity)" />
+			<label class="text" for="list_item_{{$index}}">
 					{{$index + 1}}. {{activity.name}}  | {{activity.type}} | {{activity.date}}
 			</label>
 
@@ -30,16 +34,22 @@
 	<input type="submit" value="Add new item" ng-click="add()" />
 	
 	<xt-win
-			template="tpl/xt-win.html"
-			title="{{(current | length) ? 'Edit' : 'Add'}} an item"
-			submit="submit()"
-			cancel="cancel()"
-			ng-if="dialog.show">
+		xt-form		
+		template="tpl/xt-win.html"
+		title="{{(current | length) ? 'Edit' : 'Add'}} an item"
+		submit="submit()"
+		cancel="cancel()"
+		ng-if="dialog.show">
+
 		<!-- External window content -->
 		<form ng-submit="add()" name="todoData" novalidate>
 			<div class="item">
-				<label>Activity status:</label>
-				<input type="checkbox" id="done" ng-model="current.done" ng-init="current.done = false" />
+				<label>Status:</label>
+				<input
+					type="checkbox"
+					id="done"
+					ng-model="current.done"
+					ng-init="current.done = (current | length) ? current.done : false" />
 				<label for="done">Done</label>
 			</div>
 
@@ -63,5 +73,6 @@
 			</div>
 		</form>
 		<!-- /External window content -->
+
 	</xt-win>
 </div>
