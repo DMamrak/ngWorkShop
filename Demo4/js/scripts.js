@@ -7,26 +7,13 @@ angular.module('todo').config(function($routeProvider){
 		.when('/login', {
 			templateUrl: 'tpl/login.html',
 			controller: 'LoginCtrl as login',
-			resolve: {
-				User: function(Session){
-					return Session.get()
-						.then(
-							function(response){
-								return response;
-							},
-							function(){
-								return false;
-							}
-						);
-				},
-			},
 		})
 		.when('/todo', {
 			templateUrl: 'tpl/todo.html',
 			controller: 'TodoCtrl',
 			reloadOnSearch: false,
 			resolve: {
-				User: function(Session){
+				session: function(Session){
 					return Session.get();
 				},
 			},
@@ -48,15 +35,15 @@ angular.module('todo').run(function($rootScope, $location){
 angular.module('todo').service('Session', function($q, Loader){
 	var _this = this;
 
-	_this.user = null;
+	var user = null;
 
 	_this.get = function(){
 		// Generating custom promise to be returned to route resolver
 		var deferred = $q.defer();
 		
-		if(_this.user){
+		if(user){
 			// Already logged in, resolving promise immediately
-			deferred.resolve(_this.user);
+			deferred.resolve(user);
 		}else{
 			// Not logged in yet, getting session data from the server
 			Loader
@@ -64,12 +51,12 @@ angular.module('todo').service('Session', function($q, Loader){
 				.then(
 					function(response){
 						// Session is active, resolving promise
-						_this.user = response;
+						user = response;
 						deferred.resolve(response);
 					},
 					function(error){
 						// Session is inactive, rejecting promise
-						_this.user = null;
+						user = null;
 						deferred.reject(error);
 					}
 				);
@@ -79,11 +66,19 @@ angular.module('todo').service('Session', function($q, Loader){
 		return deferred.promise;
 	};
 
-	_this.set = function(data){
-		Loader
+	_this.create = function(data){
+		return Loader
 			.post('user', data)
 			.then(function(){
-				
+				user = data;
+			});
+	};
+
+	_this.destroy =  function(){
+		return Loader
+			.post('user', null)
+			.then(function(){
+				user = null;
 			});
 	};
 });
@@ -156,11 +151,23 @@ angular.module('todo').controller('HeaderCtrl', function($scope, $location){
 // Login page main controller
 angular.module('todo').controller('LoginCtrl', function(Session){
 	var _this = this;
-	_this.user = Session.user;
+
+	_this.user = {
+		logged:  false
+	};
+
+	Session
+		.get()
+		.then(function(user){
+			if(user){
+				_this.user = user;
+				_this.user.logged = true;
+			}
+		});
 
 	_this.login = function(){
-		Loader
-			.post('user', {
+		Session
+			.create({
 				name: _this.user.name,
 				password: _this.user.password,
 			})
@@ -170,8 +177,8 @@ angular.module('todo').controller('LoginCtrl', function(Session){
 	};
 
 	_this.logout = function(){
-		Loader
-			.post('user', null)
+		Session
+			.destroy()
 			.then(function(){
 				 _this.user.logged = false;
 			});
