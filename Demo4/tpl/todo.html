@@ -34,7 +34,6 @@
 	<input type="submit" value="Add new item" ng-click="add()" />
 	
 	<xt-win
-		xt-form		
 		template="tpl/xt-win.html"
 		title="{{(current | length) ? 'Edit' : 'Add'}} an item"
 		submit="submit()"
@@ -42,36 +41,34 @@
 		ng-if="dialog.show">
 
 		<!-- External window content -->
-		<form ng-submit="add()" name="todoData" novalidate>
-			<div class="item">
-				<label>Status:</label>
-				<input
-					type="checkbox"
-					id="done"
-					ng-model="current.done"
-					ng-init="current.done = (current | length) ? current.done : false" />
-				<label for="done">Done</label>
-			</div>
+		<div class="item">
+			<label>Status:</label>
+			<input
+				type="checkbox"
+				id="done"
+				ng-model="current.done"
+				ng-init="current.done = (current | length) ? current.done : false" />
+			<label for="done">Done</label>
+		</div>
 
-			<div class="item">
-				<label>Activity name:</label>
-				<input type="text" ng-model="current.name" required />	
-			</div>
-			
-			<div class="item">
-				<label>Activity type:</label>
-				<select ng-model="current.type" required>
-					<option value=""></option>
-					<option value="work">Work</option>
-					<option value="leisure">Leisure</option>
-				</select>
-			</div>
+		<div class="item">
+			<label>Activity name:</label>
+			<input type="text" ng-model="current.name" required />	
+		</div>
+		
+		<div class="item">
+			<label>Activity type:</label>
+			<select ng-model="current.type" required>
+				<option value=""></option>
+				<option value="work">Work</option>
+				<option value="leisure">Leisure</option>
+			</select>
+		</div>
 
-			<div class="item">
-				<label>Due date:</label>
-				<input type="text" ng-model="current.date" xt-pikaday="DD MMM YYYY" required />	
-			</div>
-		</form>
+		<div class="item">
+			<label>Due date:</label>
+			<input type="text" ng-model="current.date" xt-pikaday="DD MMM YYYY" required />	
+		</div>
 		<!-- /External window content -->
 
 	</xt-win>

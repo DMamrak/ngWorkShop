@@ -1,7 +1,7 @@
 <div>
 	<h1>Login</h1>
 
-	<form ng-submit="login.login()" ng-if="!login.logged" name="userData" novalidate>
+	<form ng-submit="login.login()" ng-if="!login.user" name="userData" novalidate>
 		<div class="item">
 			<label>Username:</label>
 			<input type="text" placeholder="Username" ng-model="login.user.name" required />	
@@ -15,7 +15,7 @@
 		<input type="submit" value="Login" ng-disabled="userData.$invalid" />
 	</form>
 
-	<div ng-if="login.logged">
+	<div ng-if="login.user">
 		<p>You are currently logged in as {{login.user.name}}</p>
 		<input type="button" value="Logout" ng-click="login.logout()" />
 	</div>

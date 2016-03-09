@@ -1,13 +1,15 @@
 angular.module('todo', ['ngRoute']);
 
-angular.module('todo').config(function($routeProvider, $httpProvider){
+
+// Config block. Executed before app takes off, contains pre-run configuration
+angular.module('todo').config(function($routeProvider){
 	$routeProvider
 		.when('/login', {
 			templateUrl: 'tpl/login.html',
 			controller: 'LoginCtrl as login',
 			resolve: {
-				User: function(User){
-					return User.get()
+				User: function(Session){
+					return Session.get()
 						.then(
 							function(response){
 								return response;
@@ -16,83 +18,85 @@ angular.module('todo').config(function($routeProvider, $httpProvider){
 								return false;
 							}
 						);
-				}
+				},
 			},
-			resolveAs: 'User'
 		})
 		.when('/todo', {
 			templateUrl: 'tpl/todo.html',
 			controller: 'TodoCtrl',
 			reloadOnSearch: false,
 			resolve: {
-				User: function(User){
-					return User.get();
-				}
+				User: function(Session){
+					return Session.get();
+				},
 			},
 		})
 		.otherwise('/login');
-
-	$httpProvider.interceptors.push('SessionInterceptor');
 });
 
+
+// Run block. Executed once application takes off
 angular.module('todo').run(function($rootScope, $location){
-	$rootScope.$on('$routeChangeSuccess', function(){
-		console.log('$routeChangeSuccess');
-	});
-
-	$rootScope.$on('$routeChangeError', function(){
+	// Watching for route change errors, thrown by route resolvers, and redirecting to the Login page
+	$rootScope.$on('$routeChangeError', function($event, newPath, oldPath){
 		$location.path('/login');
-		console.log('$routeChangeError');
 	});
 });
 
-angular.module('todo').service('SessionInterceptor', function(){
+
+// Service incapsulating session resolving logic
+angular.module('todo').service('Session', function($q, Loader){
 	var _this = this;
 
-	_this.request = function(config){
-		return config;
-	};
-
-	_this.requestError = function(error){
-		return error;
-	};
-
-	_this.response = function(response){
-		return response;
-	};
-
-	_this.responseError = function(error){
-		return error;
-	};
-
-});
-
-angular.module('todo').service('User', function($location, Loader){
-	var _this = this;
+	_this.user = null;
 
 	_this.get = function(){
-		return Loader.get('user');
-			/*
-			.then(
-				function(user){
-					console.log('resolve success');
-					return user;
-				},
-				function(){
-					console.log('resolve error');
-					//$location.path('/login');
-					return false;
-				}
-			);
-			*/
+		// Generating custom promise to be returned to route resolver
+		var deferred = $q.defer();
+		
+		if(_this.user){
+			// Already logged in, resolving promise immediately
+			deferred.resolve(_this.user);
+		}else{
+			// Not logged in yet, getting session data from the server
+			Loader
+				.get('user')
+				.then(
+					function(response){
+						// Session is active, resolving promise
+						_this.user = response;
+						deferred.resolve(response);
+					},
+					function(error){
+						// Session is inactive, rejecting promise
+						_this.user = null;
+						deferred.reject(error);
+					}
+				);
+		}
+
+		// Returning generated promise
+		return deferred.promise;
+	};
+
+	_this.set = function(data){
+		Loader
+			.post('user', data)
+			.then(function(){
+				
+			});
 	};
 });
 
+
+// Service mocking asynch http GET and POST requests
 angular.module('todo').service('Loader', function($q, $timeout){
 	var _this = this;
 
+	// Public property to expose service busy state
 	_this.busy = false;
 
+	// Getting data from storage asynchronously with random time delay
 	_this.get = function(name){
 		_this.busy = true;
 		var result = sessionStorage.getItem(name);
@@ -101,8 +105,10 @@ angular.module('todo').service('Loader', function($q, $timeout){
 
 		$timeout(function(){
 			if(result){
+				// Resolving if key is found in the storage
 				deferred.resolve(angular.fromJson(result));
 			}else{
+				// Rejecting if there's no given key
 				deferred.reject();
 			}
 			_this.busy = false;
@@ -111,18 +117,22 @@ angular.module('todo').service('Loader', function($q, $timeout){
 		return deferred.promise;
 	};
 
+	// Adding / removing data
 	_this.post = function(name, data){
 		_this.busy = true;
 		var timeout = Math.round(Math.random() * 1000);
 		if(data){
+			// Adding item if the request was made with payload
 			sessionStorage.setItem(name, angular.toJson(data));
 		}else{
+			// Removing item otherwise
 			sessionStorage.removeItem(name);
 		}
 
 		var deferred = $q.defer();
 
 		$timeout(function(){
+			// Resolving the request (always successfull)
 			deferred.resolve();
 			_this.busy = false;
 		}, timeout);
@@ -144,18 +154,15 @@ angular.module('todo').controller('HeaderCtrl', function($scope, $location){
 
 
 // Login page main controller
-angular.module('todo').controller('LoginCtrl', function(Loader, User){
+angular.module('todo').controller('LoginCtrl', function(Session){
 	var _this = this;
-	_this.user = User;
-
-	console.log(User);
+	_this.user = Session.user;
 
 	_this.login = function(){
 		Loader
 			.post('user', {
 				name: _this.user.name,
 				password: _this.user.password,
-				logged: true
 			})
 			.then(function(){
 				 _this.user.logged = true;
@@ -238,7 +245,6 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 		save(activities);
 	};
 
-
 	// Toggling activity status
 	$scope.toggle = function(item){
 		save($scope.activities)
@@ -294,11 +300,6 @@ angular.module('todo').directive('xtWin', function(){
 		restrict: 'E',
 		replace: true,
 		transclude: true,
-		controller: function($scope){
-			var _this = this;
-
-			_this.scope = $scope;
-		},
 		scope: {
 			title: '@title',
 			submit: '&submit',
@@ -307,26 +308,9 @@ angular.module('todo').directive('xtWin', function(){
 		templateUrl: function($element, $attrs){
 			return $attrs.template;
 		},
-		link: function($scope, $element, $attrs, $ctrl, $transclude){
-			console.log($transclude);
-
-			$transclude($scope, function($element, $scope){
-				console.log($element, $scope)
-			});
-		},
 	};
 });
 
-
-angular.module('todo').directive('xtForm', function(){
-	return {
-		restrict: 'A',
-		require: 'xtWin',
-		link: function($scope, $element, $attrs, $ctrl){
-			console.log($ctrl);
-		}
-	};
-});
 
 // Multipurpose filters component
 angular.module('todo').directive('xtFilters', function(){

@@ -1,10 +1,12 @@
 <div class="modalbg">
 	<div class="window">
 		<h1 class="heading">{{title}}</h1>
-		<div class="transcluded" ng-transclude></div>
-		<div class="controls">
-			<input type="button" value="Submit" ng-click="submit()" />
-			<input type="button" value="Cancel" ng-click="cancel()" />
-		</div>
+		<form name="transcluded" novalidate ng-submit="submit()">
+			<div class="transcluded" ng-transclude></div>
+			<div class="controls">
+				<input type="submit" value="Submit" ng-disabled="transcluded.$invalid" />
+				<input type="button" value="Cancel" ng-click="cancel()" />
+			</div>
+		</form>
 	</div>
 </div>
