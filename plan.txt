@@ -110,12 +110,16 @@ Directives in-depth
 		+ template: String / Function
 		+ templateUrl: String / Function
 		+ scope: Boolean / Object
+
+============================== DAY 5 ====================================
+
 		- controller: Function / String
+		- controllerAs
+		- bindToController
 		- require
-		- compile: Function (returning object)
-		- prelink: Function
-		- postlink (link): Function
-		- priority
+		- compile: Function (returning object / function)
+		- link (postlink): Function (only if compile is not defined)
+		- priority: (multiple directives on single DOM element) = 0
 		- transclude
 
 	- Templateless directives
@@ -126,11 +130,14 @@ Directives in-depth
 		- '&' expression
 	- Controllers, requiring external controllers:
 		- share a controller
-		- share the same instance of a controller (require, ?, ^^)
+		- share the same instance of a controller (require, '?', '', '^', '^^')
 		- controllerAs: string
 		- bindToController: Boolean
 
-	- Compile and Link phases
+	- Compile phase (run once for each directive before scope is created)
+	- Link phases (runs for each directive instance):
+		- prelink (before template is linked to the scope and children link functions are executed)
+		- postlink (after template is linked to the scope and children link functions are executed) the only required option in DDO
 
 	- Transclusion (trans inclusion): definition in template, transcluded scope, transcludeFn
 	
@@ -138,9 +145,19 @@ Directives in-depth
 	
 	- caching external templates (script templates and templateCache)
 
+
+
+	http://odetocode.com/blogs/scott/archive/2014/05/28/compile-pre-and-post-linking-in-angularjs.aspx
+	http://teropa.info/blog/2015/06/09/transclusion.html
+
+
+
+
 Components
 	- serving custom directive as a component: possible approaches
 	- extending directives with shared controller and scope
+
+Component router (?)
 
 Performance problem and other issues and ways to work around them
 	- Filters multiple evaluation, using filters inside controllers and services

@@ -19,6 +19,16 @@ angular.module('todo').config(function($routeProvider){
 				},
 			},
 		})
+		.when('/demo', {
+			templateUrl: 'tpl/demo.html',
+			controller: 'DemoCtrl',
+			reloadOnSearch: false,
+			resolve: {
+				session: function(Session){
+					return Session.get();
+				},
+			},
+		})
 		.otherwise('/login');
 });
 
@@ -75,7 +85,7 @@ angular.module('todo').service('Loader', function($q, $timeout){
 		var deferred = $q.defer();
 
 		$timeout(function(){
-			// Resolving the request (in this case always successfull)
+			// Resolving the request (always successfull)
 			deferred.resolve();
 			_this.busy = false;
 		}, timeout);
@@ -308,6 +318,12 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 });
 
 
+angular.module('todo').controller('DemoCtrl', function($scope){
+	$scope.name = 'demo';
+
+
+});
+
 // Simple directive to show / hide the spinner while loader is busy
 angular.module('todo').directive('xtLoader', function(Loader){
 	return {
@@ -320,8 +336,57 @@ angular.module('todo').directive('xtLoader', function(Loader){
 		link: function($scope, $element, $attrs){
 			$scope.loader = Loader;
 		},
+
 	};
 });
+
+
+
+
+angular.module('todo').directive('parent', function(){
+	return {
+		scope: {},
+		template: '<div>{{name}}<child></child></div>',
+		compile: function($element, $attrs){
+			console.log('parent compile phase');
+			return {
+				pre: function($scope, $element, $attrs){
+					console.log('parent prelink phase');
+					$scope.name = 'parent';
+				},
+				post: function($scope, $element, $attrs){
+					console.log('parent postlink phase');
+				}
+			};
+		}
+	};
+});
+
+angular.module('todo').directive('child', function(){
+	return {
+		scope: {},
+		template: '<div>{{name}}</div>',
+		compile: function($element, $attrs){
+			console.log('child compile phase');
+			return {
+				pre: function($scope, $element, $attrs){
+					console.log('child prelink phase');
+					$scope.name = 'child';
+				},
+				post: function($scope, $element, $attrs){
+					console.log('child postlink phase');
+				}
+			};
+		}
+	};
+});
+
+
+
+
+
+
+
 
 
 // Multipurpose dialog window component
@@ -430,3 +495,50 @@ angular.module('todo').filter('length', function(){
 		return result;
 	};
 });
+
+
+/*
+angular.module('todo').directive('dir', function(){
+	return {
+		replace: true,
+		restrict: 'E',
+		scope: {
+			title: '@index'
+		},
+		transclude: true,
+		template: '<div>Mydir: <span ng-transclude></span> / {{title}} </div>',
+		controller: function($scope, $transclude){
+			this.scope = $scope;
+			console.log($scope);
+			console.log('controller', arguments);
+			$transclude(function($tscope, $telement){
+				console.log('$transclude', arguments);
+			});
+		},
+		compile: function(){
+			console.log('compile', arguments);
+			return {
+				pre: function($scope){
+					console.log('pre', $scope.title, arguments);
+				},
+				post: function($scope){
+					console.log('post', $scope.title, arguments);
+				}
+			};
+		}
+	};
+});
+
+
+angular.module('todo').directive('dir2', function(){
+	return {
+		replace: true,
+		restrict: 'A',
+		require: '?^dir',
+		link: function(scope, element, attrs, controller){
+			console.log(scope, controller.scope);
+		}
+
+	};
+});
+*/

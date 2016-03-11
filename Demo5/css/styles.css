@@ -1,0 +1,208 @@
+body {
+	font-family: sans-serif;
+	font-size: 14px;
+}
+
+p {
+	margin: 15px 0;
+}
+
+h1 {
+	font-size: 24px;
+	margin-bottom: 15px;
+}
+
+header {
+	background-color: #CCCCCC;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="button"],
+input[type="submit"],
+select
+{
+	height: 25px;
+	padding-top: 0;
+	padding-bottom: 0;
+	line-height: 25px;
+	vertical-align: middle;
+	font-family: inherit;
+	font-size: inherit;
+	border: 1px solid #CCCCCC;
+	box-sizing: border-box;
+}
+
+input[type="button"],
+input[type="submit"]
+{
+	cursor: pointer;
+}
+
+input[type="text"],
+input[type="password"],
+select
+{
+	width: 200px;
+}
+
+input[type="checkbox"],
+label[for]
+{
+	cursor: pointer;
+	line-height: 25px;
+	vertical-align: middle;
+}
+
+
+/* Menu */
+
+.menu {
+	padding: 15px 15px 0 15px;
+}
+
+.menu .item {
+	display: inline-block;
+	padding: 10px 35px;
+	border-radius: 4px 4px 0 0;
+	background-color: #DDDDDD;
+}
+
+.menu .item.active {
+	background-color: #FFFFFF;
+}
+
+
+
+/* Layout */
+
+.header .menu,
+.content
+{
+	width: 1024px;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+.content {
+	padding: 15px;
+}
+
+
+/* Form */
+
+form .item {
+	margin: 15px 0;
+}
+
+form .item:first-child {
+	margin-top: 0;
+}
+
+form .item:last-child {
+	margin-bottom: 0;
+}
+
+form .item label:not([for]) {
+	display: block;
+	margin-bottom: 5px;
+}
+
+form .item input.ng-touched.ng-invalid,
+form .item select.ng-touched.ng-invalid
+{
+
+	border: 1px solid #AA0000;
+}
+
+
+/* Filters */
+
+.filters {
+	padding: 10px;
+	background-color: #EEEEEE;
+}
+
+.filters input[type="text"],
+.filters select
+{
+	width: 120px;
+	margin-right: 5px;
+}
+
+
+/* Todos */
+
+.todos {
+	margin: 15px 0;
+}
+
+.todos .item {
+	padding: 10px;
+}
+
+.todos .item:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+.todos .item:nth-child(2n + 1) {
+	background-color: #EEEEEE;
+}
+
+.todos .item .controls{
+	float: right;
+}
+
+.todos .item.done .text {
+	text-decoration: line-through;
+}
+
+
+/* Modal bg */
+
+.modalbg {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,0.5);
+}
+
+
+/* Spinner */
+
+.spinner {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+
+/* Window */
+
+.window {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	box-shadow: 0 0 20px 0 rgba(0,0,0,0.35);
+	background: #FFFFFF;
+}
+
+.window .heading,
+.window .transcluded,
+.window .controls
+{
+	margin: 0;
+	padding: 10px;
+}
+
+.window .heading,
+.window .controls
+{
+	background-color: #EEEEEE;
+}
