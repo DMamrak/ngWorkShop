@@ -150,6 +150,8 @@ Directives in-depth
 	http://odetocode.com/blogs/scott/archive/2014/05/28/compile-pre-and-post-linking-in-angularjs.aspx
 	http://teropa.info/blog/2015/06/09/transclusion.html
 
+	https://bitbucket.org/denis_mamrak/ngdemo/src
+
 
 
 
