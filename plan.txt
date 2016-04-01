@@ -113,33 +113,33 @@ Directives in-depth
 
 ============================== DAY 5 ====================================
 
-		- controller: Function / String
-		- controllerAs
-		- bindToController
+		+ controller: Function / String
+		+ controllerAs
+		+ bindToController
 		- require
 		- compile: Function (returning object / function)
 		- link (postlink): Function (only if compile is not defined)
 		- priority: (multiple directives on single DOM element) = 0
 		- transclude
 
-	- Templateless directives
+	+ Templateless directives
 	+ Templates (internal, external, dynamically set)
 	+ Scopes: parent, inherited, isolated. Passing data into isolated scope:
-		- '@' attrs
-		- '=' bindings
-		- '&' expression
+		+ '@' attrs
+		+ '=' bindings
+		+ '&' expression
 	- Controllers, requiring external controllers:
-		- share a controller
+		+ share a controller
 		- share the same instance of a controller (require, '?', '', '^', '^^')
-		- controllerAs: string
-		- bindToController: Boolean
+		+ controllerAs: string
+		+ bindToController: Boolean
 
 	- Compile phase (run once for each directive before scope is created)
 	- Link phases (runs for each directive instance):
 		- prelink (before template is linked to the scope and children link functions are executed)
 		- postlink (after template is linked to the scope and children link functions are executed) the only required option in DDO
 
-	- Transclusion (trans inclusion): definition in template, transcluded scope, transcludeFn
+	+ Transclusion (trans inclusion): definition in template, transcluded scope, transcludeFn
 	
 	- Nested directives, compiling and linking order
 	
@@ -151,6 +151,40 @@ Directives in-depth
 	http://teropa.info/blog/2015/06/09/transclusion.html
 
 	https://bitbucket.org/denis_mamrak/ngdemo/src
+
+
+============================== DAY 6 ====================================
+
+App structure:
+	- main module, injecting dependancies
+	- config, routes, hash based navigation
+	- run, value, constant
+	- outer controllers
+	- page controllers
+	- widget controllers
+	- reusable components, directives, nested directives, directives with external templates
+	- isolated scope directives flow: data in, callback out
+
+
+NG-PDK issues:
+	- WORK WITH DATA, NOT WITH DOM!!!111ONEONEONE (how to render :)
+	- NO WORKING WITH DOM OR SCOPE IN SERVICE!!!1111
+	- dot in models: object vs. primitives (but better not to change parent scope at all)
+	http://stackoverflow.com/questions/14049480/what-are-the-nuances-of-scope-prototypal-prototypical-inheritance-in-angularjs/14049482#14049482
+
+
+ng-pdk refactoring:
+	- jade
+	- directive templates, declarativeness
+	- DisplayWhen (dot in models)
+	- $templateCache
+	- Grunt / Gulp / Webpack as a single build tool
+	- npm as a single entry point
+	- graddle (no error logs, can't be installed with npm, useless)
+
+
+
+
 
 
 
