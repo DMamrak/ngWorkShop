@@ -497,32 +497,49 @@ angular.module('todo').filter('length', function(){
 });
 
 
-/*
-angular.module('todo').directive('dir', function(){
+angular.module('todo').controller('DirCtrl', function($scope){
+	var _this = this;
+
+	_this.id = Math.round(Math.random() * 1000000);
+
+	console.log(_this);
+});
+
+angular.module('todo').directive('dir1', function(){
 	return {
 		replace: true,
 		restrict: 'E',
 		scope: {
-			title: '@index'
+			title: '@title'
 		},
 		transclude: true,
-		template: '<div>Mydir: <span ng-transclude></span> / {{title}} </div>',
+		template: '<div>Mydir: {{dir.title}} <div ng-transclude></div></div>',
+		controller: 'DirCtrl',
+		bindToController: true,
+		controllerAs: 'dir',
+		/*
 		controller: function($scope, $transclude){
-			this.scope = $scope;
-			console.log($scope);
-			console.log('controller', arguments);
-			$transclude(function($tscope, $telement){
-				console.log('$transclude', arguments);
-			});
+			//this.scope = $scope;
+			//console.log('parent: ', $scope);
+			//console.log('controller', arguments);
+
+			// $transclude(function($tscope, $telement){
+				//console.log('$transclude', arguments);
+			// });
 		},
+		*/
 		compile: function(){
-			console.log('compile', arguments);
+			console.log('compile dir1', arguments);
+
 			return {
 				pre: function($scope){
-					console.log('pre', $scope.title, arguments);
+					console.log('pre dir1', arguments);
 				},
-				post: function($scope){
-					console.log('post', $scope.title, arguments);
+				post: function($scope, $element, $attrs, $ctrl){
+					console.log('post dir1', arguments);
+
+					//$ctrl.further = 'first directive'
+					//console.log($ctrl);
 				}
 			};
 		}
@@ -532,13 +549,25 @@ angular.module('todo').directive('dir', function(){
 
 angular.module('todo').directive('dir2', function(){
 	return {
-		replace: true,
-		restrict: 'A',
-		require: '?^dir',
-		link: function(scope, element, attrs, controller){
-			console.log(scope, controller.scope);
+		//replace: true,
+		restrict: 'E',
+		require: '^dir1',
+		scope: false,
+		compile: function(){
+			console.log('compile dir2', arguments);
+
+			return {
+				pre: function($scope){
+					console.log('pre dir2', arguments);
+				},
+				post: function($scope, $element, $attrs, $ctrl){
+					console.log('post dir2', arguments);
+
+					//$ctrl.further = 'first directive'
+					//console.log($ctrl);
+				}
+			};
 		}
 
 	};
 });
-*/
