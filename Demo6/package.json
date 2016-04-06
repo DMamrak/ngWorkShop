@@ -12,7 +12,6 @@
   "dependencies": {
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
-    "httpdispatcher": "^1.0.0",
     "underscore-db": "^0.10.0"
   }
 }

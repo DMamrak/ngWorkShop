@@ -6,9 +6,13 @@ angular.module('demo').controller('Main', function($scope, $http){
 	getData();	
 
 	$scope.submit = function($event){
+		var url = '/api/users';
+		var date = Date.now();
+		var data = angular.extend({}, $scope.user, {date: date});
 		$http
-			.post('/api/users', $scope.user)
+			.post('/api/users', data)
 			.success(function(user){
+				$scope.user = {};
 				getData();
 			});
 
@@ -16,8 +20,9 @@ angular.module('demo').controller('Main', function($scope, $http){
 	};
 
 	function getData(){
+		var url = '/api/users';
 		$http
-			.get('/api/users')
+			.get(url)
 			.success(function(users){
 				$scope.users = users;
 			});
