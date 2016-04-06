@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "name": "name",
+      "surname": "surname",
+      "age": "23",
+      "id": "963ddf5e-b103-4d5c-9862-65d3e83323a9"
+    },
+    {
+      "name": "Denis",
+      "surname": "Mamrak",
+      "age": "36",
+      "id": "17ef8482-5970-4198-acf1-500d8ba07828"
+    },
+    {
+      "name": "Jim",
+      "surname": "Morrison",
+      "age": "27",
+      "id": "807e4552-ab1c-42c0-8162-67c30d147151"
+    },
+    {
+      "name": "Kurt",
+      "surname": "Cobain",
+      "age": "28",
+      "id": "59cc407e-50dd-4636-81ed-1b890207f4b2"
+    },
+    {
+      "name": "Jimmy",
+      "surname": "Hendrix",
+      "age": "32",
+      "id": "65d10da2-b1cd-4401-9037-83d9a5aa252a"
+    },
+    {
+      "name": "Victor",
+      "surname": "Tsoi",
+      "age": "32",
+      "id": "e628e4d3-5302-4a7f-88b3-1d3fc629d1e6"
+    },
+    {
+      "name": "Justin",
+      "surname": "Biber",
+      "age": "25",
+      "id": "e64921ab-7a80-41c8-a00c-58d7461567ba"
+    }
+  ]
+}

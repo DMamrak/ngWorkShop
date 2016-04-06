@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app="demo">
+<head>
+	<title>Demo App</title>
+	<script type="text/javascript" src="angular.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+</head>
+<body ng-controller="Main">
+	<form ng-submit="submit($event)">
+		<label>Name:</label>
+		<input type="text" ng-model="user.name" />
+		&nbsp;
+		<label>Surname:</label>
+		<input type="text" ng-model="user.surname" />
+		&nbsp;
+		<label>Age:</label>
+		<input type="text" ng-model="user.age" />
+		&nbsp;
+		<input type="submit" value="submit" />
+	</form>
+
+	<pre>{{users | json}}</pre>
+</body>
+</html>
