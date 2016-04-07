@@ -156,33 +156,34 @@ Directives in-depth
 ============================== DAY 6 ====================================
 
 App structure:
-	- main module, injecting dependancies
-	- config, routes, hash based navigation
-	- run, value, constant
-	- outer controllers
-	- page controllers
-	- widget controllers
-	- reusable components, directives, nested directives, directives with external templates
-	- isolated scope directives flow: data in, callback out
+	+ main module, injecting dependancies
+	+ config, routes, hash based navigation
+	+ run, value, constant
+	+ outer controllers
+	+ page controllers
+	+ widget controllers
+	+ reusable components, directives, nested directives, directives with external templates
+	+ isolated scope directives flow: data in, callback out
 
 
 NG-PDK issues:
-	- WORK WITH DATA, NOT WITH DOM!!!111ONEONEONE (how to render :)
-	- NO WORKING WITH DOM OR SCOPE IN SERVICE!!!1111
-	- dot in models: object vs. primitives (but better not to change parent scope at all)
+	+ WORK WITH DATA, NOT WITH DOM!!!111ONEONEONE (how to render :)
+	+ NO WORKING WITH DOM OR SCOPE IN SERVICE!!!1111
+	+ dot in models: object vs. primitives (but better not to change parent scope at all)
 	http://stackoverflow.com/questions/14049480/what-are-the-nuances-of-scope-prototypal-prototypical-inheritance-in-angularjs/14049482#14049482
 
 
 ng-pdk refactoring:
-	- jade
-	- directive templates, declarativeness
-	- DisplayWhen (dot in models)
-	- $templateCache
-	- Grunt / Gulp / Webpack as a single build tool
-	- npm as a single entry point
-	- graddle (no error logs, can't be installed with npm, useless)
+	+ jade
+	+ directive templates, declarativeness
+	+ DisplayWhen (dot in models)
+	+ $templateCache
+	+ Grunt / Gulp / Webpack as a single build tool
+	+ npm as a single entry point
+	+ graddle (no error logs, can't be installed with npm, useless)
 
 
+============================== DAY 7 ====================================
 
 
 
