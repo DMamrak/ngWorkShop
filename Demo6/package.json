@@ -4,7 +4,6 @@
   "description": "Angularjs homework part 1",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "author": "Denis Mamrak",
@@ -12,7 +11,7 @@
   "dependencies": {
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
-    "lowdb": "^0.12.5",
-    "underscore-db": "^0.10.0"
+    "lodash": "^4.8.2",
+    "lowdb": "^0.12.5"
   }
 }
