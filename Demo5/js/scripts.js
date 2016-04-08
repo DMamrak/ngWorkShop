@@ -343,44 +343,6 @@ angular.module('todo').directive('xtLoader', function(Loader){
 
 
 
-angular.module('todo').directive('parent', function(){
-	return {
-		scope: {},
-		template: '<div>{{name}}<child></child></div>',
-		compile: function($element, $attrs){
-			console.log('parent compile phase');
-			return {
-				pre: function($scope, $element, $attrs){
-					console.log('parent prelink phase');
-					$scope.name = 'parent';
-				},
-				post: function($scope, $element, $attrs){
-					console.log('parent postlink phase');
-				}
-			};
-		}
-	};
-});
-
-angular.module('todo').directive('child', function(){
-	return {
-		scope: {},
-		template: '<div>{{name}}</div>',
-		compile: function($element, $attrs){
-			console.log('child compile phase');
-			return {
-				pre: function($scope, $element, $attrs){
-					console.log('child prelink phase');
-					$scope.name = 'child';
-				},
-				post: function($scope, $element, $attrs){
-					console.log('child postlink phase');
-				}
-			};
-		}
-	};
-});
-
 
 
 
@@ -498,76 +460,57 @@ angular.module('todo').filter('length', function(){
 
 
 angular.module('todo').controller('DirCtrl', function($scope){
-	var _this = this;
+	var id = Math.round(Math.random() * 1000000);
 
-	_this.id = Math.round(Math.random() * 1000000);
+	$scope.id = id;
+	this.id = id;
 
-	console.log(_this);
+	console.log('running controller', $scope.id);
 });
 
-angular.module('todo').directive('dir1', function(){
+angular.module('todo').directive('parent', function(){
 	return {
+		restrict: 'E',
+		scope: {},
+		template: '<div style="border: 1px solid #000000;">Parent: {{id}} <child></child> </div>',
 		replace: true,
-		restrict: 'E',
-		scope: {
-			title: '@title'
-		},
-		transclude: true,
-		template: '<div>Mydir: {{dir.title}} <div ng-transclude></div></div>',
 		controller: 'DirCtrl',
-		bindToController: true,
-		controllerAs: 'dir',
-		/*
-		controller: function($scope, $transclude){
-			//this.scope = $scope;
-			//console.log('parent: ', $scope);
-			//console.log('controller', arguments);
-
-			// $transclude(function($tscope, $telement){
-				//console.log('$transclude', arguments);
-			// });
-		},
-		*/
-		compile: function(){
-			console.log('compile dir1', arguments);
-
+		compile: function($element, $attrs){
+			console.log('running compile')
 			return {
-				pre: function($scope){
-					console.log('pre dir1', arguments);
+				pre: function($scope, $element, $attrs, $ctrl){
+					console.log('running prelink', $scope.id)
 				},
 				post: function($scope, $element, $attrs, $ctrl){
-					console.log('post dir1', arguments);
-
-					//$ctrl.further = 'first directive'
-					//console.log($ctrl);
+					console.log('running postlink', $scope.id)
 				}
 			};
 		}
 	};
 });
 
-
-angular.module('todo').directive('dir2', function(){
+angular.module('todo').directive('child', function(){
 	return {
-		//replace: true,
 		restrict: 'E',
-		require: '^dir1',
-		scope: false,
-		compile: function(){
-			console.log('compile dir2', arguments);
-
+		scope: {},
+		//template: '<div style="border: 1px solid #FF0000;">Child: {{id}}</div>',
+		templateUrl: '/tpl/child.html',
+		replace: true,
+		require: '?^parent',
+		compile: function($element, $attrs){
+			console.log('running compile')
 			return {
-				pre: function($scope){
-					console.log('pre dir2', arguments);
+				pre: function($scope, $element, $attrs, $ctrl){
+					console.log('running prelink', $ctrl)
 				},
 				post: function($scope, $element, $attrs, $ctrl){
-					console.log('post dir2', arguments);
-
-					//$ctrl.further = 'first directive'
-					//console.log($ctrl);
+					console.log('running postlink', $ctrl)
 				}
 			};
 		}
-
 	};
+});
+
+angular.module('todo').run(function($templateCache){
+	$templateCache.put('/tpl/child.html', '<div style="border: 1px solid #FF0000;">Child: {{id}}</div>');
 });

@@ -134,7 +134,11 @@ Directives in-depth
 		+ controllerAs: string
 		+ bindToController: Boolean
 
-	- Compile phase (run once for each directive before scope is created)
+	- Compile phase 
+		- runs once for each directive (not for each instance, ng-repeat as an example)
+		- runs before scope is created
+		- receives template, not the real element
+	- Controller runs after that and receives scope and element reference (WHY????!!!!)
 	- Link phases (runs for each directive instance):
 		- prelink (before template is linked to the scope and children link functions are executed)
 		- postlink (after template is linked to the scope and children link functions are executed) the only required option in DDO
@@ -143,7 +147,9 @@ Directives in-depth
 	
 	- Nested directives, compiling and linking order
 	
-	- caching external templates (script templates and templateCache)
+	- caching external templates:
+		- $templateCache.put()
+		- $templateCache.get()
 
 
 
@@ -184,6 +190,13 @@ ng-pdk refactoring:
 
 
 ============================== DAY 7 ====================================
+
+
+
+
+
+
+
 
 
 
