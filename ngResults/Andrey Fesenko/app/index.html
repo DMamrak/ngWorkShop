@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html ng-app="homework">
+<head>
+	<title>ngHomeWork</title>
+	<link rel="stylesheet" type="text/css" href="normalize.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+
+	<script type="text/javascript" src="angular.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+</head>
+<body ng-controller="Main">
+    <table ng-init="loadData(currentLoadRange)">
+        <tr>
+            <th ng-click="updateSortOrder('name')">
+                <span>Name</span>
+                <span class="sort-status-arrow" ng-show="sortOrder === 'name'" ng-class="{'reverse-view':reverseSortOrder}"></span>
+            </th>
+            <th ng-click="updateSortOrder('surname')">
+                <span>Surname</span>
+                <span class="sort-status-arrow" ng-show="sortOrder === 'surname'" ng-class="{'reverse-view':reverseSortOrder}"></span>
+            </th>            
+            <th ng-click="updateSortOrder('email')">
+                <span>Email</span>
+                <span class="sort-status-arrow" ng-show="sortOrder === 'email'" ng-class="{'reverse-view':reverseSortOrder}"></span>
+            </th>            
+            <th ng-click="updateSortOrder('id')">
+                <span>Id</span>
+                <span class="sort-status-arrow" ng-show="sortOrder === 'id'" ng-class="{'reverse-view':reverseSortOrder}"></span>
+            </th>            
+            <th ng-click="updateSortOrder('lang')">
+                <span>Language</span>
+                <span class="sort-status-arrow" ng-show="sortOrder === 'lang'" ng-class="{'reverse-view':reverseSortOrder}"></span>
+            </th>            
+            <th ng-click="updateSortOrder('role')">
+                <span>Role</span>
+                <span class="sort-status-arrow" ng-show="sortOrder === 'role'" ng-class="{'reverse-view':reverseSortOrder}"></span>
+            </th>            
+            <th ng-click="updateSortOrder('created')">
+                <span>Created</span>
+                <span class="sort-status-arrow" ng-show="sortOrder === 'created'" ng-class="{'reverse-view':reverseSortOrder}"></span>
+            </th>            
+            <th ng-click="updateSortOrder('updated')">
+                <span>Updated</span>
+                <span class="sort-status-arrow" ng-show="sortOrder === 'updated'" ng-class="{'reverse-view':reverseSortOrder}"></span>
+            </th>            
+        </tr>
+        <tr ng-repeat="user in users | orderBy:sortOrder:reverseSortOrder">
+            <td>{{user.name}}</td>
+            <td>{{user.surname}}</td>            
+            <td>{{user.email}}</td>            
+            <td>{{user.id}}</td>            
+            <td>{{user.lang | normalizeLanguage}}</td>            
+            <td>{{user.role | normalizeRoles}}</td>            
+            <td>{{user.created | date:'medium'}}</td>            
+            <td>{{user.updated | date:'medium'}}</td>            
+        </tr>        
+    </table>
+    <div ng-if="moreUsersAvailable" class='load-button' ng-click="loadData(currentLoadRange)">Load more...</div>
+</body>
+</html>
