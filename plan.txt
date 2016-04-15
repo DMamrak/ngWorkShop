@@ -116,11 +116,11 @@ Directives in-depth
 		+ controller: Function / String
 		+ controllerAs
 		+ bindToController
-		- require
-		- compile: Function (returning object / function)
-		- link (postlink): Function (only if compile is not defined)
-		- priority: (multiple directives on single DOM element) = 0
-		- transclude
+		+ require
+		+ compile: Function (returning object / function)
+		+ link (postlink): Function (only if compile is not defined)
+		+ priority: (multiple directives on single DOM element) = 0
+		+ transclude
 
 	+ Templateless directives
 	+ Templates (internal, external, dynamically set)
@@ -128,30 +128,28 @@ Directives in-depth
 		+ '@' attrs
 		+ '=' bindings
 		+ '&' expression
-	- Controllers, requiring external controllers:
+
+============================== DAY 6 ====================================
+
+	+ Controllers, requiring external controllers:
 		+ share a controller
-		- share the same instance of a controller (require, '?', '', '^', '^^')
+		+ share the same instance of a controller (require, '?', '', '^', '^^')
 		+ controllerAs: string
 		+ bindToController: Boolean
 
-	- Compile phase 
-		- runs once for each directive (not for each instance, ng-repeat as an example)
-		- runs before scope is created
-		- receives source template, not the real element (instance template)
-	- Controller runs after that and receives scope and element reference (WHY????!!!!)
-	- Link phases (runs for each directive instance):
-		- prelink (before template is linked to the scope and children link functions are executed)
-		- postlink (after template is linked to the scope and children link functions are executed) the only required option in DDO
+	+ Compile phase 
+		+ runs once for each directive (not for each instance, ng-repeat as an example)
+		+ runs before scope is created
+		+ receives source template, not the real element (instance template)
+	+ Controller runs after that and receives scope and element reference (WHY????!!!!)
+	+ Link phases (runs for each directive instance):
+		+ prelink (before template is linked to the scope and children link functions are executed)
+		+ postlink (after template is linked to the scope and children link functions are executed) the only required option in DDO
 
 	+ Transclusion (trans inclusion): definition in template, transcluded scope, transcludeFn
 	
-	- Nested directives, compiling and linking order
+	+ Nested directives, compiling and linking order
 	
-	- caching external templates:
-		- $templateCache.put()
-		- $templateCache.get()
-
-
 
 	http://odetocode.com/blogs/scott/archive/2014/05/28/compile-pre-and-post-linking-in-angularjs.aspx
 	http://stackoverflow.com/questions/24615103/angular-directives-when-and-how-to-use-compile-controller-pre-link-and-post/24615207
@@ -160,7 +158,7 @@ Directives in-depth
 	https://bitbucket.org/denis_mamrak/ngdemo/src
 
 
-============================== DAY 6 ====================================
+============================== DAY 7 ====================================
 
 App structure:
 	+ main module, injecting dependancies
@@ -190,9 +188,22 @@ ng-pdk refactoring:
 	+ graddle (no error logs, can't be installed with npm, useless)
 
 
-============================== DAY 7 ====================================
+============================== DAY 8 ====================================
 
+Custom filter best practises
 
+Dependancy injections:
+	- Orderer arguments vs. named arguments
+	- annotate
+	- array annotation
+	- $inject
+
+Caching external templates:
+	- $templateCache.put()
+	- $templateCache.get()
+
+ngAnimate:
+	- ???
 
 
 
