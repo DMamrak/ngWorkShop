@@ -17,9 +17,18 @@ server
 	.get(function(request, response){
 		var query = url.parse(request.url, true).query;
 		var page = _(query).pick(['start', 'end']).defaults({start: 0, end: 5}).value();
-		var filter = _(query).omit(['start', 'end']).value();
-		var users = db('users').chain().filter(filter).slice(page.start, page.end).value() || [];
-		respond(response, users);
+		var sorting = _(query).pick(['sort', 'order']).defaults({sort: 'updated', order: 'desc'}).value();
+		var filter = _(query).omit(['start', 'end', 'sort', 'order']).value();
+		var users = db('users').chain().filter(filter).orderBy(sorting.sort, sorting.order).slice(page.start, page.end).value() || [];
+		var data = {
+			meta: {
+				start: page.start,
+				end: page.end,
+				total: users.length
+			},
+			data: users
+		};
+		respond(response, data);
 	})
 	.post(function(request, response){
 		var id = uid('users');
@@ -40,7 +49,7 @@ server
 		var user = db('users').find({id: id}) || {};
 		respond(response, user);
 	})
-	.post(function(request, response){
+	.patch(function(request, response){
 		var id = _.toNumber(request.params.id);
 		var date = Date.now();
 		var data = _.assign({}, request.body, {
@@ -48,6 +57,14 @@ server
 		});
 		var user = db('users').chain().find({id: id}).assign(data).value();
 		respond(response, user);
+	})
+	.delete(function(request, response){
+		var ids = request.params.id.split(';');
+		for(var i=0; i<ids.length; i++){
+			var id = _.toNumber(ids[i]);
+			db('users').remove({id: id});
+		}
+		respond(response);
 	});
 
 server.listen(PORT, function(){
@@ -55,9 +72,14 @@ server.listen(PORT, function(){
 });
 
 function respond(response, data){
+	var success = Math.random() >= 0.2;
 	var delay = 500 + Math.round(Math.random() * 1000);
 	setTimeout(function(){
-		response.send(data);
+		if(success){
+			response.send(data);
+		}else{
+			response.status(500).send({error: 'Something went really wrong.'});
+		}
 	}, delay);
 }
 

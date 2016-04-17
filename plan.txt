@@ -193,9 +193,9 @@ ng-pdk refactoring:
 Custom filter best practises
 
 Dependancy injections:
-	- Orderer arguments vs. named arguments
-	- annotate
-	- array annotation
+	+ Orderer arguments vs. named arguments
+	+ annotate
+	+ array annotation
 	- $inject
 
 Caching external templates:
@@ -220,6 +220,10 @@ Components
 	- extending directives with shared controller and scope
 
 Component router (?)
+
+
+
+
 
 Performance problem and other issues and ways to work around them
 	- Filters multiple evaluation, using filters inside controllers and services

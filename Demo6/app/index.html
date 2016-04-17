@@ -10,22 +10,22 @@
 	<script type="text/javascript" src="app.js"></script>
 </head>
 <body ng-controller="Main">
-	<form ng-submit="submit($event)" novalidate class="filters">
+	<form ng-submit="filter($event)" novalidate class="filters">
 		<label>Name:</label>
-		<input type="text" ng-model="user.name" required />
+		<input type="text" ng-model="filters.name" required />
 		&nbsp;
 		
 		<label>Surname:</label>
-		<input type="text" ng-model="user.surname" required />
+		<input type="text" ng-model="filters.surname" required />
 		&nbsp;
 		
 		<label>Email:</label>
-		<input type="text" ng-model="user.email" required />
+		<input type="text" ng-model="filters.email" required />
 		&nbsp;
 		
 		<label>Role:</label>
-		<select ng-model="user.role" required>
-			<option value="">select role...</option>
+		<select ng-model="filters.role" ng-change="filter()" required>
+			<option value=""></option>
 			<option value="SU">Superadmin</option>
 			<option value="AD">Admin</option>
 			<option value="AU">Author</option>
@@ -35,8 +35,8 @@
 		&nbsp;
 
 		<label>Language:</label>
-		<select ng-model="user.lang" required>
-			<option value="">select language...</option>
+		<select ng-model="filters.lang" ng-change="filter()" required>
+			<option value=""></option>
 			<option value="EN">English</option>
 			<option value="DE">German</option>
 			<option value="FR">French</option>
@@ -44,34 +44,109 @@
 		</select>
 		&nbsp;
 
-		<input type="submit" value="Reset" />
+		<input type="submit" value="Filter" />
+		<input type="button" value="Reset" ng-click="reset()" />
 	</form>
 
+	<input type="button" value="Add user" ng-click="add()" />
+	<input type="button" value="Delete users" ng-click="delete(selected)" ng-disabled="!selected.length" />
+
+	<!-- <pre>{{selected | json}}</pre> -->
+	
 	<table>
 		<thead>
 			<tr>
-				<th><a href="" class="key asc">Name</a></th>
-				<th><a href="">Surname</a></th>
-				<th><a href="">Email</a></th>
-				<th><a href="">Language</a></th>
-				<th><a href="">Role</a></th>
-				<th><a href="">Created</a></th>
-				<th><a href="">Updated</a></th>
+				<th></th>
+				<th>
+					<a href="" class="{{sorting.sort == 'name' ? sorting.order : ''}}" ng-click="sort('name')">Name</a>
+				</th>
+				<th>
+					<a href="" class="{{sorting.sort == 'surname' ? sorting.order : ''}}" ng-click="sort('surname')">Surname</a>
+				</th>
+				<th>
+					<a href="" class="{{sorting.sort == 'email' ? sorting.order : ''}}" ng-click="sort('email')">Email</a>
+				</th>
+				<th>
+					<a href="" class="{{sorting.sort == 'language' ? sorting.order : ''}}" ng-click="sort('language')">Language</a>
+				</th>
+				<th>
+					<a href="" class="{{sorting.sort == 'role' ? sorting.order : ''}}" ng-click="sort('role')">Role</a>
+				</th>
+				<th>
+					<a href="" class="{{sorting.sort == 'created' ? sorting.order : ''}}" ng-click="sort('created')">Created</a>
+				</th>
+				<th>
+					<a href="" class="{{sorting.sort == 'updated' ? sorting.order : ''}}" ng-click="sort('updated')">Updated</a>
+				</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="user in users">
-				<td>{{user.name}}</td>
-				<td>{{user.surname}}</td>
-				<td>{{user.email}}</td>
-				<td>{{user.lang | lookup:'lang'}}</td>
-				<td>{{user.role | lookup:'role'}}</td>
-				<td>{{user.created | moment:'format':'DD MMM YYYY HH:mm'}}</td>
-				<td>{{user.updated | moment:'format':'DD MMM YYYY HH:mm'}}</td>
+			<tr ng-repeat="user in users" class="{{user.selected ? 'selected' : ''}}">
+				<td><input type="checkbox" ng-model="user.selected" ng-change="select(user)" /></td>
+				<td>{{user.name | track:'name'}}</td>
+				<td>{{::user.surname}}</td>
+				<td>{{::user.email}}</td>
+				<td>{{::user.lang | lookup:'lang'}}</td>
+				<td>{{::user.role | lookup:'role'}}</td>
+				<td>{{::user.created | moment:'format':'DD MMM YYYY HH:mm'}}</td>
+				<td>{{::user.updated | moment:'format':'DD MMM YYYY HH:mm'}}</td>
+				<td>
+					<input type="button" value="Edit" ng-click="edit(user)" ng-disabled="user.selected">
+					<input type="button" value="Delete" ng-click="delete([user])"  ng-disabled="user.selected">
+				</td>
 			</tr>
 		</tbody>
 	</table>
 
-	<input type="button" value="Load more..." class="load" />
+	<input type="button" value="Load more..." class="load" ng-click="load()" />
+
+	<div class="modal" ng-show="window.show">
+		<div class="window">
+			<h2>{{window.title}}</h2>
+			<form ng-submit="submit()" novalidate>
+				<div class="form_item">
+					<label>Name:</label>
+					<input type="text" ng-model="current.name" required />
+				</div>
+
+				<div class="form_item">
+					<label>Surname:</label>
+					<input type="text" ng-model="current.surname" required />
+				</div>
+
+				<div class="form_item">
+					<label>Email:</label>
+					<input type="text" ng-model="current.email" required />
+				</div>
+
+				<div class="form_item">
+					<label>Language:</label>
+					<select ng-model="current.lang" required>
+						<option value=""></option>
+						<option value="EN">English</option>
+						<option value="DE">German</option>
+						<option value="FR">French</option>
+						<option value="IT">Italian</option>
+					</select>
+				</div>
+
+				<div class="form_item">
+					<label>Role:</label>
+					<select ng-model="current.role" required>
+						<option value=""></option>
+						<option value="SU">Superadmin</option>
+						<option value="AD">Admin</option>
+						<option value="AU">Author</option>
+						<option value="UP">Uploader</option>
+						<option value="VI">Visitor</option>
+					</select>
+				</div>
+
+				<input type="submit" value="Submit" />
+				<input type="button" value="Cancel" ng-click="cancel()" />
+			</form>
+		</div>
+	</div>
 </body>
 </html>
