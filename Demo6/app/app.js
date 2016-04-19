@@ -124,38 +124,156 @@ angular.module('homework').filter('moment', function() {
 });
 
 
+angular.module('homework').filter('track', function(){
+	return function(value, name){
+		console.log(name, ' = ', value)
+		return value;
+	};
+});
 
 angular.module('homework').controller('Main', function($scope, $http, Data){
-	$scope.user = {};
+	$scope.window = {};
+	$scope.page = {start: 0, end: 15};
+	$scope.sorting = {sort: 'updated', order: 'desc'};
+	$scope.filters = {};
+	$scope.users = [];
+	$scope.current = {};
+	$scope.selected = [];
 	
-	var total = 100;
+	var size = 15;	
+	//var total = 100;
 
 	getData();	
 
-	$scope.submit = function($event){
-		var url = '/api/users';
-		var data = $scope.user;
+	$scope.load = function(){
+		$scope.page.start += size;
+		$scope.page.end += size;
+		getData();
+	};
+
+	$scope.add = function(){
+		$scope.window = {
+			title: 'Add user',
+			show: true
+		}
+	}
+
+	$scope.edit = function(user){
+		$scope.current = user;
+		$scope.window = {
+			title: 'Edit user',
+			show: true
+		}
+	}
+
+	$scope.cancel = function(){
+		$scope.window = {
+			show: false
+		}
+	}
+
+	$scope.submit = function(){
+		$scope.window = {
+			show: false
+		}
+
+		var user = $scope.current;
+
+		if(user.id){
+			edit(user);
+		}else{
+			create(user);
+		}
+
+	};
+
+	$scope.select = function(user){
+		if(user.selected){
+			$scope.selected.push(user);
+		}else{
+			var index = $scope.selected.indexOf(user);
+			$scope.selected.splice(index, 1);
+		}
+	};
+
+	$scope.delete = function(selected){
+		var ids = selected.map(function(user){
+			return user.id;
+		});
+		var url = '/api/users/' + ids.join(';');
 		$http
-			.post('/api/users', data)
-			.success(function(user){
-				$scope.user = {};
+			.delete(url)
+			.success(function(){
+				$scope.users = [];
+				$scope.page.start = 0;
+				$scope.page.end = size;
+
 				getData();
 			});
+	}
 
-		$event.preventDefault();
-	};
+	$scope.filter = function(){
+		$scope.users = [];
+		$scope.page.start = 0;
+		$scope.page.end = size;
+
+		getData();
+	}
+
+	$scope.sort = function(field){
+		if($scope.sorting.sort == field){
+			$scope.sorting.order = $scope.sorting.order == 'asc' ? 'desc' : 'asc';
+		}else{
+			$scope.sorting.sort = field;
+			$scope.sorting.order = 'asc';
+		}
+		$scope.users = [];
+		$scope.page.start = 0;
+		$scope.page.end = size;
+		getData();
+	}
+
+	$scope.reset = function(){
+		$scope.filters = {};
+		$scope.users = [];
+		$scope.page.start = 0;
+		$scope.page.end = size;
+		getData();
+	}
 
 	function getData(){
 		var url = '/api/users';
+		var params = angular.extend({}, $scope.sorting, $scope.filters, $scope.page);
 		$http
-			.get(url)
-			.success(function(users){
-				$scope.users = users;
+			.get(url, {params: params})
+			.success(function(response){
+				$scope.users = $scope.users.concat(response.data);
 				/*
 				if($scope.users.length < total){
 					generate();
 				}
 				*/
+			});
+	}
+
+	function create(user){
+		var url = '/api/users';
+		$http
+			.post(url, user)
+			.success(function(user){
+				$scope.current = {};
+				getData();
+			});
+	}
+
+	function edit(user){
+		var index = $scope.users.indexOf(user);
+		var url = '/api/users/' + user.id;
+		$http
+			.patch(url, user)
+			.success(function(user){
+				$scope.current = {};
+				$scope.users[index] = user;
 			});
 	}
 
