@@ -26,7 +26,7 @@ Scope concept
 	+ Coupling logic and view
 	+ Model incapsulation
 	+ API for model changes watching
-	- API listening / broadcasting events
+	- API for listening / broadcasting events
 	+ Nesting scopes
 	+ Scopes inheritanse and method / property lookup
 	+ Digest loops and dirty checking
@@ -123,7 +123,7 @@ Directives in-depth
 		+ transclude
 
 	+ Templateless directives
-	+ Templates (internal, external, dynamically set)
+	+ Templates (internal, external, dynamically assigned)
 	+ Scopes: parent, inherited, isolated. Passing data into isolated scope:
 		+ '@' attrs
 		+ '=' bindings
@@ -132,38 +132,43 @@ Directives in-depth
 ============================== DAY 6 ====================================
 
 	+ Controllers, requiring external controllers:
-		+ share a controller
-		+ share the same instance of a controller (require, '?', '', '^', '^^')
-		+ controllerAs: string
+		+ sharing a controller
+		+ sharing the same instance of a controller (require, '?', '', '^', '^^')
+		+ controllerAs: String
 		+ bindToController: Boolean
 
 	+ Compile phase 
 		+ runs once for each directive (not for each instance, ng-repeat as an example)
 		+ runs before scope is created
 		+ receives source template, not the real element (instance template)
-	+ Controller runs after that and receives scope and element reference (WHY????!!!!)
+
+	+ Controller runs after that and receives scope and element reference
+
 	+ Link phases (runs for each directive instance):
 		+ prelink (before template is linked to the scope and children link functions are executed)
 		+ postlink (after template is linked to the scope and children link functions are executed) the only required option in DDO
 
-	+ Transclusion (trans inclusion): definition in template, transcluded scope, transcludeFn
+	+ Transclusion (transition and inclusion): 
+		+ definition in template,
+		+ transcluded scope,
+		- transcludeFunction
 	
-	+ Nested directives, compiling and linking order
+	+ compiling and linking phses order in nested directives
 	
-
+For further reading:
+	compile, prelink and postlink in depth:
 	http://odetocode.com/blogs/scott/archive/2014/05/28/compile-pre-and-post-linking-in-angularjs.aspx
 	http://stackoverflow.com/questions/24615103/angular-directives-when-and-how-to-use-compile-controller-pre-link-and-post/24615207
+	transclusion in depth:
 	http://teropa.info/blog/2015/06/09/transclusion.html
-
-	https://bitbucket.org/denis_mamrak/ngdemo/src
 
 
 ============================== DAY 7 ====================================
 
 App structure:
-	+ main module, injecting dependancies
-	+ config, routes, hash based navigation
+	+ main module, injecting dependencies
 	+ run, value, constant
+	+ config, routes, hash based navigation
 	+ outer controllers
 	+ page controllers
 	+ widget controllers
@@ -171,49 +176,46 @@ App structure:
 	+ isolated scope directives flow: data in, callback out
 
 
-NG-PDK issues:
-	+ WORK WITH DATA, NOT WITH DOM!!!111ONEONEONE (how to render :)
+NG-PDK issues discussion:
+	+ WORK WITH DATA, NOT WITH DOM!!!111ONEONEONE
 	+ NO WORKING WITH DOM OR SCOPE IN SERVICE!!!1111
-	+ dot in models: object vs. primitives (but better not to change parent scope at all)
+	+ "dot in models": object vs. primitives (but better not to change parent scope at all)
+
+For further reading:
+	"dot in models" issue explained:
 	http://stackoverflow.com/questions/14049480/what-are-the-nuances-of-scope-prototypal-prototypical-inheritance-in-angularjs/14049482#14049482
 
 
 ng-pdk refactoring:
-	+ jade
-	+ directive templates, declarativeness
-	+ DisplayWhen (dot in models)
-	+ $templateCache
+	+ Getting rid of Jade and migrating to native html
+	+ Refactoring directive templates to bring some declarativeness
+	+ DisplayWhen directiveservice: why is it bad and how to make things better
+	+ $templateCache 
 	+ Grunt / Gulp / Webpack as a single build tool
 	+ npm as a single entry point
-	+ graddle (no error logs, can't be installed with npm, useless)
+	+ Getting rid of Graddle (no error logs, can't be installed with npm, useless on frontend)
 
 
 ============================== DAY 8 ====================================
 
+Discussing homework
+
 Custom filter best practises
 
-Dependancy injections:
-	- Orderer arguments vs. named arguments
-	- annotate
-	- array annotation
-	- $inject
+Dependency injections:
+	+ Orderer arguments vs. named arguments
+	+ array annotation
+	+ $inject
+
+============================== DAY 9 ====================================
+
+Discussing homework
 
 Caching external templates:
 	- $templateCache.put()
 	- $templateCache.get()
 
-ngAnimate:
-	- ???
-
-
-
-
-
-
-
-
-
-
+ngAnimate
 
 Components
 	- serving custom directive as a component: possible approaches
@@ -221,13 +223,18 @@ Components
 
 Component router (?)
 
+
+============================== DAY 10 ====================================
+
+
 Performance problem and other issues and ways to work around them
 	- Filters multiple evaluation, using filters inside controllers and services
 	- Scopes isolation, nesting and inheritance
 	- ng-if
-	- One-time binding
+	- :: one-time binding
 	- track by
-	- $scope.$digest() vs $scope.$apply and events (?)
+	- $scope.$digest() vs $scope.$apply and events
+	- $scope.$applyAsynch()
 	- ng-cloak
 	- ng-init and other ways to declare vars and methods silently
 
@@ -255,7 +262,7 @@ Setting up a very basic project (todo app or something similar)
 	- Github / Bitbucket
 	- NodeJS + npm
 	- Grunt
-	- Bower (Why Bower?)
+	- Bower (Why use Bower?)
 
 Automated project deployment in depth
 	- npm 
