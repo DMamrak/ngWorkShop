@@ -214,8 +214,10 @@ Discussing homework
 Project structure:
 	- flat (never do this)
 	- small apps: grouped by type (Services, Controllers, Directives, Filters, Templates)
+	- midsize apps (?)
 	- large apps: common (grouped by reusable easy to copy and paste component: js + template + css + images) + grouped by page (possibly grouped by type or / and component inside)
-	- huuge apps: grouping common by modules, separate route config for each page.
+	- huuuuuge apps: grouping common by modules, separate route config for each page.
+	- multiple apps with shared codebase: separate submodule repo for shared code, and dedicated repos for each app
 	- css (this is complicated)
 		- store styles in common file
 		- use separate file and link them all in page head
@@ -229,15 +231,18 @@ JS performance and internal browser optimizations:
 	- "delete" on object property is expensive
 
 Performance problem and other issues and ways to work around them
+	- ng-bind is about twice as fast as expression bind
 	- Filters multiple evaluation: run each digest loop and at the end to recheck
 	- Using filters inside controllers and services: $filter('filtername')(input, argument);
 	- Scopes isolation, nesting and inheritance
 	- $watchCollection() instead if deep $watch()
+	- debounce the model
 	- watching functions: may be expencive
 	- ng-if instead of ng-show
 	- :: one-time binding
 	- track by
-	- $scope.$digest() vs $scope.$apply() / $scope.$apply() = $rootScopr.$digest()
+	- $compileProvider.debugInfoEnabled(false); in config (disables attaching binding data and CSS classes to DOM elements) angular.reloadWithDebugInfo() in console brings this back
+	- $scope.$digest() vs $scope.$apply() / $scope.$apply() = $rootScope.$digest()
 	- $scope.$evalAsync(): will run in current digest, if any, or start it's own
 	- $scope.$applyAsync(): will run in timeout ~10ms
 	- ng-cloak
