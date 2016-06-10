@@ -1,19 +1,20 @@
 <div>
 	<h1>Todo</h1>
-
+	
 	<xt-filters
 			template="tpl/xt-filters.html"
 			filters="filters"
 			change="updateURL()">
 	</xt-filters>
-	
+
 	<p>Showing {{filtered.length}} of {{activities.length}}</p>
 
 	<ul class="list todos">
 		<li ng-if="!filtered.length" class="item">No data</li>
 		<li
 			ng-repeat="activity in activities | filter:{name: filters.name, type: filters.type, done: filters.done} as filtered"
-			class="item {{activity.done ? 'done' : 'undone'}}">
+			ng-init="console.log(activity.id)"
+			class="item {{activity.done ? 'done' : 'undone'}} slide">
 			
 			<input
 				type="checkbox"
@@ -34,6 +35,7 @@
 	<input type="submit" value="Add new item" ng-click="add()" />
 	
 	<xt-win
+		class="animate fade"
 		template="tpl/xt-win.html"
 		title="{{(current | length) ? 'Edit' : 'Add'}} an item"
 		submit="submit()"

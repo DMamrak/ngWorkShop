@@ -1,5 +1,5 @@
 // Defining main app module, injecting dependancies
-angular.module('todo', ['ngRoute']);
+angular.module('todo', ['ngRoute', 'ngAnimate']);
 
 
 // Config block. Executed before app takes off, contains pre-run configuration
@@ -43,55 +43,55 @@ angular.module('todo').run(function($rootScope, $location){
 
 
 // Service mocking asynch http GET and POST requests
-angular.module('todo').service('Loader', function($q, $timeout){
+angular.module('todo').service('Loader', function($http){
 	var _this = this;
 
 	// Public property to expose service busy state
 	_this.busy = false;
 
 	// Getting data from storage asynchronously with random time delay
-	_this.get = function(name){
+	_this.get = function(url, data){
 		_this.busy = true;
-		var result = sessionStorage.getItem(name);
-		var deferred = $q.defer();
-		var timeout = Math.round(Math.random() * 1000);
-
-		$timeout(function(){
-			if(result){
-				// Resolving if key is found in the storage
-				deferred.resolve(angular.fromJson(result));
-			}else{
-				// Rejecting if there's no given key
-				deferred.reject();
-			}
-			_this.busy = false;
-		}, timeout);
-
-		return deferred.promise;
+		return $http
+			.get(url, data)
+			.success(success)
+			.error(error);
 	};
 
-	// Adding / removing data
-	_this.post = function(name, data){
+	// Adding data
+	_this.post = function(url, data){
 		_this.busy = true;
-		var timeout = Math.round(Math.random() * 1000);
-		if(data){
-			// Adding item if the request was made with payload
-			sessionStorage.setItem(name, angular.toJson(data));
-		}else{
-			// Removing item otherwise
-			sessionStorage.removeItem(name);
-		}
-
-		var deferred = $q.defer();
-
-		$timeout(function(){
-			// Resolving the request (always successfull)
-			deferred.resolve();
-			_this.busy = false;
-		}, timeout);
-
-		return deferred.promise;
+		return $http
+			.post(url, data)
+			.success(success)
+			.error(error);
 	};
+
+	// Editing data
+	_this.patch = function(url, data){
+		_this.busy = true;
+		return $http
+			.patch(url + '/' + data.id, data)
+			.success(success)
+			.error(error);
+	};
+
+	// Removing item
+	_this.delete = function(url, data){
+		_this.busy = true;
+		return $http
+			.delete(url + '/' + data.id, data)
+			.success(success)
+			.error(error);
+	};
+
+	function success(){
+		_this.busy = false;
+	}
+
+	function error(){
+		_this.busy = false;
+	}
 });
 
 
@@ -99,43 +99,17 @@ angular.module('todo').service('Loader', function($q, $timeout){
 angular.module('todo').service('Session', function($q, Loader){
 	var _this = this;
 
-	var session = {
-		loaded: false,
-		data: null
-	};
-
 	_this.get = function(){
 		// Generating custom promise to be returned to route resolver
 		var deferred = $q.defer();
+		var data = angular.fromJson(sessionStorage.getItem('user'));
 		
-		if(session.loaded){
-			// Session data is already loaded
-			if(session.data){
-				// Session is active, resolving promise immediately
-				deferred.resolve(session.data);
-			}else{
-				// Session is inactive, rejecting promise immediately
-				deferred.reject();
-			}
+		if(data){
+			// Session is active, resolving promise immediately
+			deferred.resolve(data);
 		}else{
-			// Session data isn't loaded, getting session data from the server
-			Loader
-				.get('user')
-				.then(
-					function(data){
-						// Session is active, resolving promise with session data
-						session.data = data;
-						deferred.resolve(session.data);
-					},
-					function(){
-						// Session is inactive, rejecting promise
-						session.data = null;
-						deferred.reject();
-					}
-				)
-				.finally(function(){
-					session.loaded = true;
-				});
+			// Session is inactive, rejecting promise immediately
+			deferred.reject();
 		}
 
 		// Returning generated promise
@@ -145,19 +119,15 @@ angular.module('todo').service('Session', function($q, Loader){
 	// Creating session
 	_this.create = function(data){
 		return Loader
-			.post('user', data)
+			.post('/api/users', data)
 			.then(function(){
-				session.data = data;
+				sessionStorage.setItem('user', angular.toJson(data));
 			});
 	};
 
 	// Destroying session
 	_this.destroy =  function(){
-		return Loader
-			.post('user', null)
-			.then(function(){
-				session.data = null;
-			});
+		sessionStorage.removeItem('user')
 	};
 });
 
@@ -238,6 +208,7 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 	// Binding $scope.filters to the URL query string for deep linking
 	// Gettin the initial value from the URL first
 	$scope.filters = $location.search();
+
 	// Tnen updating the value each time user changes the URL manually
 	$scope.$on('$routeUpdate', function(e){
 		$scope.filters = $location.search();
@@ -245,8 +216,8 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 
 	// Fetching the list and exposing it to the template
 	Loader
-		.get('activities')
-		.then(function(result){
+		.get('/api/todos')
+		.success(function(result){
 			$scope.activities = result;
 		});
 
@@ -259,8 +230,6 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 	// Adding an item to the list
 	$scope.add = function(){
 		$scope.dialog.show = true;
-		// Creating separated activities model to prevent immediate model change
-		activities = $scope.activities.concat([$scope.current]);
 	};
 
 	// Editing an item
@@ -268,9 +237,6 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 		$scope.dialog.show = true;
 		// Creating separated activities model to prevent immediate model change
 		$scope.current = angular.copy(selected);
-		activities = $scope.activities.map(function(item){
-			return item != selected ? item : $scope.current;
-		});
 	};
 
 	// Removing an item
@@ -279,23 +245,48 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 		activities = $scope.activities.filter(function(item){
 			return item != selected;
 		});
-		save(activities);
+
+		Loader
+			.delete('/api/todos', selected)
+			.success(function(){
+				var index = $scope.activities.indexOf($scope.current);
+				$scope.activities.splice(index, 1);
+			});
 	};
 
 	// Toggling activity status
 	$scope.toggle = function(item){
-		save($scope.activities)
-			.then(null, function(){
-				// Rolling back status in case of error
+		Loader
+			.patch('/api/todos', item)
+			.error(function(){
 				item.done = !item.done;
 			});
 	};
 
 	// Submitting action
 	$scope.submit = function(){
-		$scope.current = {};
 		$scope.dialog.show = false;
-		save(activities);
+
+		if($scope.current.id){
+			// Saving changes to existing item
+			Loader
+				.patch('/api/todos', $scope.current)
+				.success(function(todo){
+					var id = todo.id;
+					var item = _.find($scope.activities, {id: id});
+					var index = $scope.activities.indexOf(item);
+					$scope.activities[index] = todo;
+					$scope.current = {};
+				});
+		}else{
+			// Creating new item
+			Loader
+				.post('/api/todos', $scope.current)
+				.success(function(todo){
+					$scope.activities.push(todo);
+					$scope.current = {};
+				});
+		}
 	};
 
 	// Canceling action
@@ -303,18 +294,6 @@ angular.module('todo').controller('TodoCtrl', function($scope, $location, $http,
 		$scope.current = {};
 		$scope.dialog.show = false;
 	};
-
-	// Saving items list on the "server side"
-	function save(activities){
-		// Returning created promise to allow other functions
-		// attach their own success and error handlers
-		return Loader.post('activities', activities)
-			.then(function(){
-				// Applying changes to the model after successfully saving them
-				$scope.activities = activities;
-				$scope.current = {};
-			});
-	}
 });
 
 
@@ -339,17 +318,6 @@ angular.module('todo').directive('xtLoader', function(Loader){
 
 	};
 });
-
-
-
-
-
-
-
-
-
-
-
 
 // Multipurpose dialog window component
 angular.module('todo').directive('xtWin', function(){
@@ -459,58 +427,10 @@ angular.module('todo').filter('length', function(){
 });
 
 
-angular.module('todo').controller('DirCtrl', function($scope){
-	var id = Math.round(Math.random() * 1000000);
+angular.module('todo').filter('register', function(){
+	return function(input){
+		console.log('register', input);
 
-	$scope.id = id;
-	this.id = id;
-
-	console.log('running controller', $scope.id);
-});
-
-angular.module('todo').directive('parent', function(){
-	return {
-		restrict: 'E',
-		scope: {},
-		template: '<div style="border: 1px solid #000000;">Parent: {{id}} <child></child> </div>',
-		replace: true,
-		controller: 'DirCtrl',
-		compile: function($element, $attrs){
-			console.log('running compile')
-			return {
-				pre: function($scope, $element, $attrs, $ctrl){
-					console.log('running prelink', $scope.id)
-				},
-				post: function($scope, $element, $attrs, $ctrl){
-					console.log('running postlink', $scope.id)
-				}
-			};
-		}
-	};
-});
-
-angular.module('todo').directive('child', function(){
-	return {
-		restrict: 'E',
-		scope: {},
-		//template: '<div style="border: 1px solid #FF0000;">Child: {{id}}</div>',
-		templateUrl: '/tpl/child.html',
-		replace: true,
-		require: '?^parent',
-		compile: function($element, $attrs){
-			console.log('running compile')
-			return {
-				pre: function($scope, $element, $attrs, $ctrl){
-					console.log('running prelink', $ctrl)
-				},
-				post: function($scope, $element, $attrs, $ctrl){
-					console.log('running postlink', $ctrl)
-				}
-			};
-		}
-	};
-});
-
-angular.module('todo').run(function($templateCache){
-	$templateCache.put('/tpl/child.html', '<div style="border: 1px solid #FF0000;">Child: {{id}}</div>');
-});
+		return input;
+	}
+})

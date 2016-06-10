@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "name": "user",
+      "password": "password"
+    }
+  ],
+  "todos": [
+    {
+      "done": false,
+      "name": "Eat some more sweet shit",
+      "type": "work",
+      "date": "22 Jun 2016",
+      "id": 1,
+      "created": 1465504014501,
+      "updated": 1465506428082
+    },
+    {
+      "done": false,
+      "name": "Fuck your fucking self",
+      "type": "leisure",
+      "date": "10 Jun 2016",
+      "id": 2,
+      "created": 1465504051573,
+      "updated": 1465519008847
+    },
+    {
+      "done": false,
+      "name": "Die motherfucker, die, die!",
+      "type": "leisure",
+      "date": "17 Jun 2016",
+      "id": 3,
+      "created": 1465504115421,
+      "updated": 1465515053662
+    },
+    {
+      "done": false,
+      "name": "Burn motherfusker!",
+      "type": "work",
+      "date": "10 Jun 2016",
+      "id": 4,
+      "created": 1465505644556,
+      "updated": 1465519012433
+    }
+  ]
+}

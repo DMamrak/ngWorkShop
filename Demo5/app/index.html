@@ -10,20 +10,20 @@
 		<script type="text/javascript" src="js/pikaday.js"></script>
 		<script type="text/javascript" src="js/angular.min.js"></script>
 		<script type="text/javascript" src="js/angular-route.min.js"></script>
+		<script type="text/javascript" src="js/angular-animate.min.js"></script>
 		<script type="text/javascript" src="js/scripts.js"></script>
 	</head>
 	<body>
 		<header class="header">
 			<nav class="menu" ng-controller="HeaderCtrl as menu">
-				<a href="#/login" class="item {{menu.path == 'login' ? 'active' : 'inactive'}}">Login</a>
-				<a href="#/todo" class="item  {{menu.path == 'todo' ? 'active' : 'inactive'}}">Todo</a>
-				<a href="#/demo" class="item  {{menu.path == 'demo' ? 'active' : 'inactive'}}">Demo</a>
+				<a href="#/login" class="item {{menu.path == 'login' ? 'active' : 'inactive'}} animate">Login</a>
+				<a href="#/todo" class="item  {{menu.path == 'todo' ? 'active' : 'inactive'}} animate">Todo</a>
+				<a href="#/demo" class="item  {{menu.path == 'demo' ? 'active' : 'inactive'}} animate">Demo</a>
 			</nav>
 		</header>
 
-		<div ng-view class="content"></div>
+		<div ng-view class="content animate fade"></div>
 
-		<xt-loader template="tpl/xt-loader.html"></xt-loader>
-		<!-- <parent></parent> -->
+		<xt-loader template="tpl/xt-loader.html" class="animate fade"></xt-loader>
 	</body>
 </html>

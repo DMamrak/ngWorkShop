@@ -16,19 +16,25 @@ server
 	.route('/api/users')
 	.get(function(request, response){
 		var query = url.parse(request.url, true).query;
-		var page = _(query).pick(['start', 'end']).defaults({start: 0, end: 5}).value();
+
+		var debug   = _(query).pick(['error']).defaults({error: false}).value();
+		var page    = _(query).pick(['start', 'end']).defaults({start: 0, end: 5}).value();
 		var sorting = _(query).pick(['sort', 'order']).defaults({sort: 'updated', order: 'desc'}).value();
-		var filter = _(query).omit(['start', 'end', 'sort', 'order']).value();
-		var users = db('users').chain().filter(filter).orderBy(sorting.sort, sorting.order).slice(page.start, page.end).value() || [];
+		var filter  = _(query).omit(['start', 'end', 'sort', 'order', 'error']).value();
+		
+		var total = db('users').filter(filter);
+		var users = _(total).orderBy(sorting.sort, sorting.order).slice(page.start, page.end).value() || [];
+		
 		var data = {
 			meta: {
 				start: page.start,
 				end: page.end,
-				total: users.length
+				total: total.length
 			},
 			data: users
 		};
-		respond(response, data);
+
+		respond(response, data, debug);
 	})
 	.post(function(request, response){
 		var id = uid('users');
@@ -71,14 +77,13 @@ server.listen(PORT, function(){
 	console.log('Server is listening on port ' + PORT);
 });
 
-function respond(response, data){
-	var success = Math.random() >= 0.2;
+function respond(response, data, debug){
 	var delay = 500 + Math.round(Math.random() * 1000);
 	setTimeout(function(){
-		if(success){
-			response.send(data);
+		if(debug && debug.error){
+			response.status(500).send({error: 'Something went really wrong. We are working hard to solve the problem.'});
 		}else{
-			response.status(500).send({error: 'Something went really wrong.'});
+			response.send(data);
 		}
 	}, delay);
 }

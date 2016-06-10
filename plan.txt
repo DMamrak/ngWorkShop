@@ -16,7 +16,7 @@ Module concept
 		+ ad-hoc serving
 		+ modularity
 	+ Main module and Angular application bootstrapping
-	- injecting custom module
+	+ injecting custom module
 	
 Directive concept basics
 	+ Extending basic HTML with custom elements, attributes and interactions
@@ -53,7 +53,7 @@ Filter concept
 	+ Chaining filters
 	+ Filters pros and cons (performance impact)
 	+ "Filtered as" syntax
-	- Custom filter
+	+ Custom filter
 
 
 
@@ -212,61 +212,87 @@ Dependency injections:
 Discussing homework
 
 Project structure:
-	- flat (never do this)
-	- small apps: grouped by type (Services, Controllers, Directives, Filters, Templates)
-	- midsize apps (?)
-	- large apps: common (grouped by reusable easy to copy and paste component: js + template + css + images) + grouped by page (possibly grouped by type or / and component inside)
-	- huuuuuge apps: grouping common by modules, separate route config for each page.
-	- multiple apps with shared codebase: separate submodule repo for shared code, and dedicated repos for each app
-	- css (this is complicated)
+	+ flat (never do this)
+	+ small apps: grouped by type (Services, Controllers, Directives, Filters, Templates)
+	+ midsize apps (?)
+	+ large apps: common (grouped by reusable easy to copy and paste component: js + template + css + images) + grouped by page (possibly grouped by type or / and component inside)
+	+ huuuuuge apps: grouping common by modules, separate route config for each page.
+	+ multiple apps with shared codebase: separate submodule repo for shared code, and dedicated repos for each app
+	+ css (this is complicated)
 		- store styles in common file
 		- use separate file and link them all in page head
 		- use automation building tool to collect and combine css
 		- one more interesting way of managing css (css injection): http://stackoverflow.com/questions/15193492/how-to-include-view-partial-specific-styling-in-angularjs
 
-JS performance and internal browser optimizations:
-	- iterating over array elements is faster then on object key / value pairs
-	- iterating over array elements is faster, if they are all of the same type
-	- objects with few properties get a special representation that is significantly faster than large objects
-	- "delete" on object property is expensive
-
-Performance problem and other issues and ways to work around them
-	- ng-bind is about twice as fast as expression bind
-	- Filters multiple evaluation: run each digest loop and at the end to recheck
-	- Using filters inside controllers and services: $filter('filtername')(input, argument);
-	- Scopes isolation, nesting and inheritance
-	- $watchCollection() instead if deep $watch()
-	- debounce the model
-	- watching functions: may be expencive
-	- ng-if instead of ng-show
-	- :: one-time binding
-	- track by
-	- $compileProvider.debugInfoEnabled(false); in config (disables attaching binding data and CSS classes to DOM elements) angular.reloadWithDebugInfo() in console brings this back
-	- $scope.$digest() vs $scope.$apply() / $scope.$apply() = $rootScope.$digest()
-	- $scope.$evalAsync(): will run in current digest, if any, or start it's own
-	- $scope.$applyAsync(): will run in timeout ~10ms
-	- ng-cloak
-	- ng-init, filtering result with "as", inline functions: ways to declare vars and methods silently
-	- Batarang
-
-Caching external templates:
-	- <script type="text/ng-template" id="file/path.htm">
-	- $templateCache.put('path', 'template')
-	- $templateCache.get('path')
-
-
 ============================== DAY 10 ====================================
 
+JS performance and internal browser optimizations:
+	+ iterating over array elements is faster then on object key / value pairs
+	+ iterating over array elements is faster, if they are all of the same type
+	+ objects with few properties get a special representation that is significantly faster than large objects
+	+ "delete" on object property is expensive
+
+Performance problem and other issues and ways to work around them
+	+ ng-bind is about twice as fast as expression bind
+	+ Filters multiple evaluation: run each digest loop and at the end to recheck
+	+ Using filters inside controllers and services: $filter('filtername')(input, argument);
+	+ Scopes isolation, nesting and inheritance
+	+ $watchCollection() instead if deep $watch()
+	+ debounce the model
+	+ watching functions: may be expencive
+	+ ng-if instead of ng-show
+	+ :: one-time binding
+	- track by
+	+ $compileProvider.debugInfoEnabled(false); in config (disables attaching binding data and CSS classes to DOM elements) angular.reloadWithDebugInfo() in console brings this back
+	+ $scope.$digest() vs $scope.$apply() / $scope.$apply() = $rootScope.$digest()
+	+ $scope.$evalAsync(): will run in current digest, if any, or start it's own
+	+ $scope.$applyAsync(): will run in timeout ~10ms
+	+ ng-cloak
+	+ ng-init, filtering result with "as", inline functions: ways to declare vars and methods silently
+	+ Batarang
+
+Caching external templates:
+	+ <script type="text/ng-template" id="file/path.htm">
+	+ $templateCache.put('path', 'template')
+	+ $templateCache.get('path')
+
+
+============================== DAY 11 ====================================
+
+track by:
+	- way of removing duplicates
+	- way of optimization for long lists
 
 ngAnimate
+	- CSS transitions and animations
+	- works for ngRepeat, ngIf, ngShow, ngHide, ngClass, ngView, ngInclude etc
+	- watches events (enter, leave, move) and adds event-based class names (.ng-enter, .ng-enter-active etc)
+	- adds .ng-animate class while animating and immediately removes when animation is over
+	- animating all parameters
+	- dedicated animations
+	- animating ngView
+	- ng-[event]-stagger
+	- ng-[event]-prepare
+	- issue with template loading
+	- angular.module('appname').animation('.className', function(){ return ADO });
+	- $animate
 
-Components
-	- serving custom directive as a component: possible approaches
-	- extending directives with shared controller and scope
+Components:
+	- simpler with less capabilities
+	- CDO instead of function (forses us to use controller)
+	- restricted to element
+	- no "replace"
+	- "bindings" instead of "scope", always isolated
+	- one way binding with "<" (which in fact isn't really one way)
+	- no link function, therefore no access to the element
+	- bind to contoller as "$ctrl" by default
+	- named arguments instead of ordered ones ($scope, $element, $attrs) in order to make it work with DI
+	- require for other directive controller still works
+	- $onInit, $onChanges, $onDestroy, $postLink controller events
 
-Component router (?)
+Component router (just realeased and already deprecated)
 
-
+============================== DAY 12 ====================================
 
 Unit testing
 	- Toolkit: Jasmine, Karma, PhantomJS, browser launchers.

@@ -1,16 +1,6 @@
 {
   "users": [
     {
-      "name": "Brian",
-      "surname": "Eno",
-      "email": "brian_eno@yandex.ru",
-      "role": "AU",
-      "lang": "DE",
-      "id": 34,
-      "created": 1460066238904,
-      "updated": 1460924691516
-    },
-    {
       "name": "Daniel",
       "surname": "Harrison",
       "email": "daniel_harrison@hotmail.com",
@@ -691,16 +681,6 @@
       "updated": 1460067759672
     },
     {
-      "name": "John",
-      "surname": "Eno",
-      "email": "john_eno@yahoo.com",
-      "role": "AU",
-      "lang": "DE",
-      "id": 107,
-      "created": 1460067760891,
-      "updated": 1460924821463
-    },
-    {
       "name": "Paul",
       "surname": "Morrison",
       "email": "paul_morrison@ua.fm",
@@ -709,46 +689,6 @@
       "id": 108,
       "created": 1460067763136,
       "updated": 1460067763136
-    },
-    {
-      "name": "Nick",
-      "surname": "Tsoi",
-      "email": "nick_tsoi@yahoo.com",
-      "role": "UP",
-      "lang": "DE",
-      "id": 109,
-      "created": 1460067765183,
-      "updated": 1460067765183
-    },
-    {
-      "name": "Jim",
-      "surname": "Tsoi",
-      "email": "jim_tsoi@inbox.com",
-      "role": "AD",
-      "lang": "DE",
-      "id": 110,
-      "created": 1460067767566,
-      "updated": 1460067767566
-    },
-    {
-      "name": "Paul",
-      "surname": "Fripp",
-      "email": "paul_fripp@ua.fm",
-      "role": "UP",
-      "lang": "FR",
-      "id": 111,
-      "created": 1460067769273,
-      "updated": 1460067769273
-    },
-    {
-      "name": "Janis",
-      "surname": "Tsoi",
-      "email": "janis_tsoi@yahoo.com",
-      "role": "AU",
-      "lang": "EN",
-      "id": 112,
-      "created": 1460067771010,
-      "updated": 1460923589817
     }
   ]
 }
