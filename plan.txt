@@ -260,35 +260,35 @@ Caching external templates:
 ============================== DAY 11 ====================================
 
 track by:
-	- way of removing duplicates
-	- way of optimization for long lists
+	+ way of removing duplicates
+	+ way of optimization for long lists
 
 ngAnimate
-	- CSS transitions and animations
-	- works for ngRepeat, ngIf, ngShow, ngHide, ngClass, ngView, ngInclude etc
-	- watches events (enter, leave, move) and adds event-based class names (.ng-enter, .ng-enter-active etc)
-	- adds .ng-animate class while animating and immediately removes when animation is over
-	- animating all parameters
-	- dedicated animations
-	- animating ngView
-	- ng-[event]-stagger
-	- ng-[event]-prepare
-	- issue with template loading
+	+ CSS transitions and animations
+	+ works for ngRepeat, ngIf, ngShow, ngHide, ngClass, ngView, ngInclude etc
+	+ watches events (enter, leave, move) and adds event-based class names (.ng-enter, .ng-enter-active etc)
+	+ adds .ng-animate class while animating and immediately removes when animation is over
+	+ animating all parameters
+	+ dedicated animations
+	+ animating ngView
+	+ ng-[event]-stagger
+	+ ng-[event]-prepare
+	+ issue with template loading
 	- angular.module('appname').animation('.className', function(){ return ADO });
 	- $animate
 
 Components:
-	- simpler with less capabilities
-	- CDO instead of function (forses us to use controller)
-	- restricted to element
-	- no "replace"
-	- "bindings" instead of "scope", always isolated
-	- one way binding with "<" (which in fact isn't really one way)
-	- no link function, therefore no access to the element
-	- bind to contoller as "$ctrl" by default
-	- named arguments instead of ordered ones ($scope, $element, $attrs) in order to make it work with DI
-	- require for other directive controller still works
-	- $onInit, $onChanges, $onDestroy, $postLink controller events
+	+ simpler with less capabilities
+	+ CDO instead of function (forses us to use controller)
+	+ restricted to element
+	+ no "replace"
+	+ "bindings" instead of "scope", always isolated
+	+ one way binding with "<" (which in fact isn't really one way)
+	+ no link function, therefore no access to the element
+	+ bind to contoller as "$ctrl" by default
+	+ named arguments instead of ordered ones ($scope, $element, $attrs) in order to make it work with DI
+	+ require for other directive controller still works
+	+ $onInit, $onChanges, $onDestroy, $postLink controller events
 
 Component router (just realeased and already deprecated)
 

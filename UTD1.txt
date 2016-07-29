@@ -1,0 +1,47 @@
+Origins:
+Unit testing is a part of XP concept (Pair programming, TDD, Continuous integration), created by Kent Beck,  Chrysler Comprehensive Compensation System project leader in 1996. In October 1999 his book, Extreme Programming Explained was published. But some practises were introduced earlier:  "test-first development practise, planning and writing tests before each micro-increment" was used as early as NASA's Project Mercury, in the early 1960s.
+
+Key ideas:
+- Unit test is a kind of smoke test
+- equivalence class testing
+- boundary value testing
+- parametric testing
+- unit definition: single class vs. reasonably small portion of code (set of classess)
+- unit test as a set of assertions which can be either right or wrong
+- unit test as an interface definition (TDD)
+- nested describe for one unit: describe unit, thens describe interface elements (methods or properties) and describe test all the cases of single method / propertie
+
+Pros:
+- proof of working
+- decoupled design
+- better and deeper understanding of functionality
+- code quality improivement (discover unreachable branches of dead code, find too big and complex classes, tightly coupled classes etc)
+- help with simple refactoring
+- code documentation (test as a specification)
+- TDD (documents code as you write it, helps you to realise when to stop coding, helps with coding constipation)
+
+Cons:
+- doubles (well, at least doubles) codebase size and development time (or complex refactoring time)
+- passing all unit tests doesn't mean our system is OK
+- complete testing is impossible (both on integration and unit level)
+
+To test:
+- proper initialization
+- business logic (critical functionality)
+- working with data
+
+Not to test:
+- third party functionality (frameworks, libs, etc.)
+- view (this is what integration testing is for)
+- static things (configs, constants, etc)
+- app definition, .const(), .config(), .run() etc.
+- built in services ($http etc.)
+
+Good practices:
+- atomicity: each testcase tests only one thing
+- isolation: mock EVERY dependancy
+- keeping tests and test cases independent
+- keeping naming and organizing conventions clear
+
+Bad practices:
+- sacrificing incapsulation in the name of testability: rewriting code code to make it testable (hint: non-direct testing)
